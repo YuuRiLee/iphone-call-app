@@ -1,0 +1,92 @@
+<ion-header>
+
+	<ion-navbar>
+		<ion-title></ion-title>
+	</ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+	<!-- <div class="item-profile" text-center #profilePic [style.background-image]="'url(' + item.profilePic + ')'">
+  </div> -->
+	<!-- 
+  <div class="item-detail" padding>
+    <h2>{{user.name}}</h2>
+    <p>{{user.about}}</p>
+  </div> -->
+	<div class="user-header">
+		<img>
+		<p>{{ user.name }}</p>
+		<div class="icon-wrapper">
+			<div>
+				<button ion-button icon-only>
+					<ion-icon name="add"></ion-icon>
+				</button>
+				<p>메사지</p>
+			</div>
+			<div>
+				<button ion-button icon-only>
+					<ion-icon name="add"></ion-icon>
+				</button>
+				<p>통화</p>
+			</div>
+			<div>
+				<button ion-button icon-only>
+					<ion-icon name="add"></ion-icon>
+				</button>
+				<p>FaceTime</p>
+			</div>
+			<div>
+				<button ion-button icon-only>
+					<ion-icon name="add"></ion-icon>
+				</button>
+				<p>메일</p>
+			</div>
+		</div>
+	</div>
+
+	<ion-list class="user-content">
+		<ion-item *ngIf=user.phone>
+			<p>휴대전화</p>
+			<p>{{user.phone}}</p>
+		</ion-item>
+		<ion-item *ngIf=user.company.name>
+			<p>직장</p>
+			<p>{{user.company.name}}</p>
+		</ion-item>
+		<ion-item *ngIf=user.website>
+			<p>홈페이지</p>
+			<p>{{user.website}}</p>
+		</ion-item>
+		<ion-item *ngIf=user.address.zipcode>
+			<p>우편번호</p>
+			<p>{{user.address.zipcode}}</p>
+		</ion-item>
+		<ion-item *ngIf=user.address.street>
+			<p>거리</p>
+			<p>{{user.address.street}}</p>
+		</ion-item>
+		<ion-item *ngIf=user.address.suite>
+			<p>번지</p>
+			<p>{{user.address.suite}}</p>
+		</ion-item>
+		<ion-item *ngIf=user.address.city>
+			<p>도시</p>
+			<p>{{user.address.city}}</p>
+		</ion-item>
+		<ion-item *ngIf=user.company.name>
+			<p>회사</p>
+			<p>{{user.company.name}}</p>
+		</ion-item>
+		<ion-item>
+			<p>메모</p>
+			<input type="text">
+		</ion-item>
+		<ion-item>메시지 보내기</ion-item>
+		<ion-item>연락처 공유</ion-item>
+		<ion-item>즐겨찾기에 추가</ion-item>
+		<ion-item>이 발신자 차단</ion-item>
+	</ion-list>
+
+</ion-content>

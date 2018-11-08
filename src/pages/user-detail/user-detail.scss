@@ -1,0 +1,29 @@
+page-user-detail {
+  .item-profile {
+    width: 100%;
+    background-position: center center;
+    background-size: cover;
+    height: 250px;
+  }
+  .user-header{
+	  background-color: #FBFBFB;
+	  text-align: center;
+	  img{
+		  width: 8rem;
+		  height: 8rem;
+	  }
+	  p{
+		  font-size: 2rem;
+	  }
+	  .icon-wrapper{
+		  display: inline-block;
+		  div{
+			  display: inline-block;
+		  }
+		  p{
+			  font-size: 1rem;
+			  color: blue;
+		  }
+	  }
+  }
+}

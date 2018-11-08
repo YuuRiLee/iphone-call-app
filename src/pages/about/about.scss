@@ -1,3 +1,66 @@
 page-about {
-
+    .wrapper {
+        height: 45rem;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+    }
+    input {
+        font-size: 3rem;
+        text-align: center;
+        padding: 1rem;
+        width: 100%;
+    }
+    p {
+        color: blue;
+        text-align: center;
+        margin-top: -.5rem;
+    }
+    .dial-pad-wrapper {
+        ion-row {
+            text-align: center;
+            ion-col {
+                span {
+                    background-color: #FBFBFB;
+                    width: 7rem;
+                    height: 7rem;
+                    border-radius: 100%;
+                    display: inline-block;
+                    text-align: center;
+                    font-size: 2.5rem;
+                    padding: 2rem;
+                }
+                .call {
+                    background-color: yellowgreen;
+                    width: 7rem;
+                    height: 7rem;
+                    border-radius: 100%;
+                    display: inline-block;
+                    text-align: center;
+                    ion-icon {
+                        color: white;
+                        font-size: 3.5rem;
+                    }
+                }
+                .delete {
+                    width: 3rem;
+                    height: 3rem;
+                    position: absolute;
+                    border-radius: 100%;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    margin: auto;
+                    ion-icon {
+                        color: white;
+                        font-size: 3rem;
+                    }
+                }
+            }
+        }
+    }
 }
