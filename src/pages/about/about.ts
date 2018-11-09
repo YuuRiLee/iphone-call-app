@@ -12,6 +12,8 @@ import { first } from 'rxjs/operators';
 export class AboutPage {
 	phoneNumber: string;
 	userData: any;
+	CallData: any;
+	callList: any[] = [];
 
 	constructor(public navCtrl: NavController, public modalCtrl: ModalController,public actionsheetCtrl: ActionSheetController,public platform: Platform) {
 
@@ -20,6 +22,8 @@ export class AboutPage {
 	ngOnInit() {
 		this.phoneNumber = '';
 		this.userData = JSON.parse(localStorage.getItem('content'));
+		this.CallData = JSON.parse(localStorage.getItem('callList'));
+
 	}
 
 	userCreate() {
@@ -118,7 +122,29 @@ export class AboutPage {
 	  }
 
 	  call(){
-		  if(!this.phoneNumber) return;
-		  console.log('전화를 걸어보자');
+		  if(!this.phoneNumber) return; //번호를 입력해야만 전화를 걸 수 있음
+		  console.log('전화를 걸어보자',this.CallData);
+		//   if(localStorage.getItem('callList')){
+		// 	  console.log('통화 기록이 없습니다');
+		//   }
+		//   else{
+		// 	  console.log('통화기록 ㅐ');
+		//   }
+
+		let callResult=Math.random() >= 0.5;
+		var d = new Date();
+		this.callList=[
+			{
+				id:'',
+				name:'',
+				phone:this.phoneNumber,
+				date:d.getFullYear()+'-'+(d.getMonth() + 1)+'-'+d.getDate(),
+				receive:callResult
+
+		}
+		]
+		this.CallData.push(this.callList);
+		localStorage.setItem('callList', JSON.stringify(this.CallData));
+		console.log('전화 결과',this.callList);
 	  }
 }
