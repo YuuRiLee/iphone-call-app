@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 
-
-@IonicPage()
 @Component({
-  selector: 'page-user-detail',
-  templateUrl: 'user-detail.html'
+  selector: 'page-recent-currency',
+  templateUrl: 'recent-currency.html'
 })
-export class UserDetailPage {
+export class RecentCurrencyPage {
   user: any;
   userData: any[]=[];
   constructor(public navCtrl: NavController, public navParams: NavParams) {
@@ -29,7 +27,5 @@ export class UserDetailPage {
 	  }
 	  console.log(this.userData);
 	  localStorage.setItem('content', JSON.stringify(this.userData));
-	  location.reload();
-
   }
 }
