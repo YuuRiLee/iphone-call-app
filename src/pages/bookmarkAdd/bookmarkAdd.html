@@ -1,0 +1,21 @@
+<ion-header no-border>
+	<p>즐겨찾기에 추가하려는 연락처 선택</p>
+	<ion-navbar color='navbarColor'>
+		<ion-title>
+			즐겨찾기 추가
+		</ion-title>
+	</ion-navbar>
+	<ion-searchbar [(ngModel)]="myInput" [showCancelButton]="shouldShowCancel" (ionInput)="getItems($event)">
+	</ion-searchbar>
+</ion-header>
+
+<ion-content>
+	<ion-list>
+		<ion-item-group *ngFor="let group of groupedContacts">
+
+			<ion-item-divider light *ngIf="!searchVal">{{group.letter}}</ion-item-divider>
+			<ion-item *ngFor="let contact of group.contacts" (click)="openMenu(contact)">{{contact.name}}</ion-item>
+
+		</ion-item-group>
+	</ion-list>
+</ion-content>

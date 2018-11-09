@@ -20,6 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BookmarkPage } from '../pages/bookmark/bookmark';
 import { RecentCurrencyPage } from '../pages/recent-currency/recent-currency';
 import { VoicemailPage } from '../pages/voicemail/voicemail';
+import { BookmarkAddPage } from '../pages/bookmarkAdd/bookmarkAdd';
 
 @NgModule({
 	declarations: [
@@ -32,7 +33,8 @@ import { VoicemailPage } from '../pages/voicemail/voicemail';
 		UserCreatePage,
 		BookmarkPage,
 		RecentCurrencyPage,
-		VoicemailPage
+		VoicemailPage,
+		BookmarkAddPage
 	],
 	imports: [
 		BrowserModule,
@@ -51,7 +53,8 @@ import { VoicemailPage } from '../pages/voicemail/voicemail';
 		UserCreatePage,
 		BookmarkPage,
 		RecentCurrencyPage,
-		VoicemailPage
+		VoicemailPage,
+		BookmarkAddPage
 	],
 	providers: [
 		StatusBar,

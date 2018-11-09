@@ -1,7 +1,7 @@
 <ion-header no-border>
 	<ion-navbar color='navbarColor'>
 		<ion-buttons start>
-			<button ion-button icon-only>
+			<button ion-button icon-only (click)="addBookmark()">
 				<ion-icon name="add"></ion-icon>
 			</button>
 		</ion-buttons>
@@ -10,21 +10,29 @@
 			즐겨찾기
 		</ion-title>
 
-		<ion-buttons end>
-			<button ion-button icon-only (click)="userCreate()">
-				편집
+		<ion-buttons end *ngIf="!showDelete">
+			<button ion-button icon-only (click)="editBookmark()" >
+			편집
+			</button>
+		</ion-buttons>
+		<ion-buttons end *ngIf="showDelete">
+			<button ion-button icon-only (click)="doneEdit()" >
+			취소
 			</button>
 		</ion-buttons>
 	</ion-navbar>
 </ion-header>
 
 <ion-content padding>
-    <ion-list>
-      <ion-item ion-item *ngFor="let user of bookmarkUserData"  class="currencies-lis-item">
-	   {{user.name}}
-	   <button ion-button icon-only (click)="userDetail(user)">
-		<ion-icon name="add"></ion-icon>
-	</button>
-      </ion-item>
-    </ion-list>
+	<ion-list>
+		<ion-item ion-item *ngFor="let user of bookmarkUserData" class="currencies-lis-item">
+			<button ion-button icon-only (click)="bookmarkDel(user)" *ngIf="showDelete">
+				<ion-icon name="delete" ></ion-icon>
+			</button>
+			{{user.name}}
+			<button ion-button icon-only (click)="userDetail(user)">
+				<ion-icon name="add"></ion-icon>
+			</button>
+		</ion-item>
+	</ion-list>
 </ion-content>

@@ -13,7 +13,7 @@ export class AboutPage {
 	phoneNumber: string;
 	userData: any;
 
-	constructor(public navCtrl: NavController, public modalCtrl: ModalController,public actionsheetCtrl: ActionSheetController,public platform: Platform,) {
+	constructor(public navCtrl: NavController, public modalCtrl: ModalController,public actionsheetCtrl: ActionSheetController,public platform: Platform) {
 
 	}
 
