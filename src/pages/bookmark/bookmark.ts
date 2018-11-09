@@ -47,11 +47,16 @@ export class BookmarkPage {
 			if (data.id === this.userData[i].id) {
 				console.log('same');
 				this.userData[i].bookMarkCheck = false;
+				this.bookmarkUserData.forEach((v, i, a) => {
+					if (v.id === data.id) {
+						a.splice(i, 1);
+					}
+				})
 			}
 		}
 		console.log(this.userData);
 		localStorage.setItem('content', JSON.stringify(this.userData));
-		location.reload();
+		// location.reload();
 	}
 
 	addBookmark(){

@@ -117,4 +117,8 @@ export class AboutPage {
 		actionSheet.present();
 	  }
 
+	  call(){
+		  if(!this.phoneNumber) return;
+		  console.log('전화를 걸어보자');
+	  }
 }
