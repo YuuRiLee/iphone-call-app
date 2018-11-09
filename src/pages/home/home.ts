@@ -16,42 +16,56 @@ export class HomePage {
 	filtered: boolean = false;
 
 	groupedContacts: any[] = [];
-	nameArray: string[] = [''];
+	//nameArray: string[] = [];
 
+	searchArr:any[]=[];
 	items;
-	searchVal :string;
+	searchVal: string;
+
+
+	sorted: any[] = [];
+
 	constructor(public navCtrl: NavController, public modalCtrl: ModalController) {
 
 		this.initializeItems();
 	}
 
+	// groupContacts(contacts) {
 	groupContacts(contacts) {
 
+		contacts.forEach((c, ci, ca) => {
+			if (this.sorted.length === 0) {
+				this.sorted.push({
+					letter: c.name.charAt(0),
+					contacts: [c]
+				});
+			} else {
+				let firstLetter = c.name.charAt(0);
+				let found = false;
+				this.sorted.forEach((v, i, a) => {
+					if (v.letter === firstLetter) {
+						found = true;
 
+						a[i].contacts.push(c);
 
-		let sortedContacts = contacts;
-		let currentLetter = false;
-		let currentContacts = [];
+					}
+				});
 
-		sortedContacts.forEach((value, index) => {
-
-			if (value.charAt(0) != currentLetter) {
-
-				currentLetter = value.charAt(0);
-
-				let newGroup = {
-					letter: currentLetter,
-					contacts: []
-				};
-
-				currentContacts = newGroup.contacts;
-				this.groupedContacts.push(newGroup);
-
+				if (!found) {
+					this.sorted.push({
+						letter: c.name.charAt(0),
+						contacts: [c]
+					});
+				}
 			}
+		})
 
-			currentContacts.push(value);
 
-		});
+
+		this.groupedContacts = this.sorted;
+		console.log('sorted contacts: ', this.sorted);
+		console.log('sorted contacts: ', this.groupedContacts);
+		this.searchArr=this.groupedContacts;
 
 	}
 
@@ -66,10 +80,14 @@ export class HomePage {
 			return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
 		})
 
-		for (let i = 0; i < this.userData.length; i++) {
-			this.nameArray.push(this.userData[i].name);
-		}
-		this.groupContacts(this.nameArray); //divder 만들기
+
+		console.log(this.userData);
+
+		// for (let i = 0; i < this.userData.length; i++) {
+		// 	this.nameArray.push(this.userData[i].name);
+		// }
+		// this.groupContacts(this.nameArray); //divder 만들기
+		this.groupContacts(this.userData); //divder 만들기
 	}
 
 	userDetail(user: object) {
@@ -113,22 +131,27 @@ export class HomePage {
 
 
 	initializeItems() {
-		this.items = this.nameArray;
-		this.searchVal='';
+		this.searchVal = '';
+		this.groupedContacts=this.searchArr;
 	}
 	getItems(ev) {
 		// Reset items back to all of the items
 		this.initializeItems();
-
 		// set val to the value of the ev target
 		var val = ev.target.value;
-		this.searchVal=val;
+		this.searchVal = val;
 		// if the value is an empty string don't filter the items
 		if (val && val.trim() != '') {
-			this.items = this.items.filter((item) => {
-				return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
+			this.groupedContacts = this.groupedContacts.filter((item) => {
+				//return (item.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
+				for(let i=0;i<item.contacts.length;i++){
+					console.log(item.contacts[i].name);
+					return (item.contacts[i].name.toLowerCase().indexOf(val.toLowerCase()) > -1);
+				}
 			})
-		}
+			//console.log("Filter results:",newArr);
+		}//end if
+		console.log(this.groupedContacts);
 	}
 
 }

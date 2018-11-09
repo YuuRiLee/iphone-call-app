@@ -30,17 +30,17 @@
       </ion-item>
     </ion-list>
   </ion-item-group> -->
-	<ion-list *ngIf="!searchVal">
+	<ion-list>
 		<ion-item-group *ngFor="let group of groupedContacts">
 
-			<ion-item-divider light>{{group.letter}}</ion-item-divider>
-			<ion-item *ngFor="let contact of group.contacts">{{contact}}</ion-item>
+			<ion-item-divider light *ngIf="!searchVal">{{group.letter}}</ion-item-divider>
+			<ion-item *ngFor="let contact of group.contacts" (click)="userDetail(contact)">{{contact.name}}</ion-item>
 
 		</ion-item-group>
 	</ion-list>
-	<ion-list *ngIf="searchVal">
-		<ion-item *ngFor="let item of items">
-			{{ item }}
+	<!-- <ion-list *ngIf="searchVal">
+		<ion-item *ngFor="let item of items" (click)="userDetail(item)">
+			{{ item.name }}
 		</ion-item>
-	</ion-list>
+	</ion-list> -->
 </ion-content>
