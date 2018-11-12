@@ -33,10 +33,12 @@ export class HttpServiceProvider {
 				//let nameExtracted = data.map(v => v.name);
 
 				localStorage.setItem('content', JSON.stringify(data));
-				localStorage.setItem('callList', JSON.stringify(data));
+				//localStorage.setItem('callList',);
 			});
 	}
-
+	getCallList(){
+		localStorage.setItem('callList', JSON.stringify([]));
+	}
 }
 
 

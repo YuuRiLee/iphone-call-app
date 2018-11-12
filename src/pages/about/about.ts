@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController, Item,ActionSheetController,Platform } from 'ionic-angular';
+import { NavController, ModalController, Item, ActionSheetController, Platform } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { UserCreatePage } from '../../pages/user-create/user-create';
@@ -15,7 +15,7 @@ export class AboutPage {
 	CallData: any;
 	callList: any[] = [];
 
-	constructor(public navCtrl: NavController, public modalCtrl: ModalController,public actionsheetCtrl: ActionSheetController,public platform: Platform) {
+	constructor(public navCtrl: NavController, public modalCtrl: ModalController, public actionsheetCtrl: ActionSheetController, public platform: Platform) {
 
 	}
 
@@ -27,39 +27,39 @@ export class AboutPage {
 	}
 
 	userCreate() {
-		let addModal = this.modalCtrl.create(UserCreatePage,{phone:this.phoneNumber});
+		let addModal = this.modalCtrl.create(UserCreatePage, { phone: this.phoneNumber });
 		addModal.onDidDismiss(item => {
-			  if (item) {
-				  console.log("date 000111"+item.name);
-				  if(item.name==''&&item.familyname==''){
-					item.name='이름 없음';
-				  }
+			if (item) {
+				console.log("date 000111" + item.name);
+				if (item.name == '' && item.familyname == '') {
+					item.name = '이름 없음';
+				}
 				this.userData.push(
 					{
-						name:item.familyname+item.name,
-						email:item.email,
-						address:{
-							stree:item.street,
-							suite:item.suite,
-							city:item.city,
-							zipcode:item.zipcode
+						name: item.familyname + item.name,
+						email: item.email,
+						address: {
+							stree: item.street,
+							suite: item.suite,
+							city: item.city,
+							zipcode: item.zipcode
 						},
-						phone:item.phone,
-						website:item.website,
-						company:{
-							company:item.company
+						phone: item.phone,
+						website: item.website,
+						company: {
+							company: item.company
 						}
 
 					}
-					);
+				);
 				//storage update
-				localStorage.setItem('content',JSON.stringify(this.userData));
+				localStorage.setItem('content', JSON.stringify(this.userData));
 				location.reload();
-			  }
+			}
 		})
 		addModal.present();
 	}
-	
+
 	buttonClick(number: string) {
 		if (this.phoneNumber.length == 3) {
 			this.phoneNumber += '-';
@@ -90,61 +90,64 @@ export class AboutPage {
 
 	openMenu() {
 		let actionSheet = this.actionsheetCtrl.create({
-		  title: '',
-		  cssClass: 'action-sheets-basic-page',
-		  buttons: [
-			{
-			  text: '새로운 연락처 등록',
-			  icon: !this.platform.is('ios') ? 'share' : null,
-			  handler: () => {
-				console.log('Share clicked');
-				this.userCreate();
-			  }
-			},
-			{
-			  text: '기존의 연락처에 추가',
-			  icon: !this.platform.is('ios') ? 'heart-outline' : null,
-			  handler: () => {
-				console.log('Favorite clicked');
-			  }
-			},
-			{
-			  text: '취소',
-			  role: 'cancel', // will always sort to be on the bottom
-			  icon: !this.platform.is('ios') ? 'close' : null,
-			  handler: () => {
-				console.log('Cancel clicked');
-			  }
-			}
-		  ]
+			title: '',
+			cssClass: 'action-sheets-basic-page',
+			buttons: [
+				{
+					text: '새로운 연락처 등록',
+					icon: !this.platform.is('ios') ? 'share' : null,
+					handler: () => {
+						console.log('Share clicked');
+						this.userCreate();
+					}
+				},
+				{
+					text: '기존의 연락처에 추가',
+					icon: !this.platform.is('ios') ? 'heart-outline' : null,
+					handler: () => {
+						console.log('Favorite clicked');
+					}
+				},
+				{
+					text: '취소',
+					role: 'cancel', // will always sort to be on the bottom
+					icon: !this.platform.is('ios') ? 'close' : null,
+					handler: () => {
+						console.log('Cancel clicked');
+					}
+				}
+			]
 		});
 		actionSheet.present();
-	  }
+	}
 
-	  call(){
-		  if(!this.phoneNumber) return; //번호를 입력해야만 전화를 걸 수 있음
-		  console.log('전화를 걸어보자',this.CallData);
-		//   if(localStorage.getItem('callList')){
-		// 	  console.log('통화 기록이 없습니다');
-		//   }
-		//   else{
-		// 	  console.log('통화기록 ㅐ');
-		//   }
-
-		let callResult=Math.random() >= 0.5;
-		var d = new Date();
-		this.callList=[
-			{
-				id:'',
-				name:'',
-				phone:this.phoneNumber,
-				date:d.getFullYear()+'-'+(d.getMonth() + 1)+'-'+d.getDate(),
-				receive:callResult
-
+	call() {
+		if (!this.phoneNumber) return; //번호를 입력해야만 전화를 걸 수 있음
+		console.log('저장된 기록들', this.CallData);
+		if (localStorage.getItem('callList')) {
+			console.log('통화 기록이 없습니다');
 		}
-		]
-		this.CallData.push(this.callList);
+		else {
+			console.log('통화기록 ㅐ');
+		}
+
+		const callResult = Math.random() >= 0.5;
+		const d = new Date();
+		let id;
+		// if(this.CallData.length>0){
+		// 	id=this.CallData.length+1;
+		// }
+		id=Date.now() + Math.random();
+		const call = {
+			id:  id,
+			name: '',
+			phone: this.phoneNumber,
+			date: d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(),
+			receive: callResult
+		};
+
+		this.CallData.push(call);
 		localStorage.setItem('callList', JSON.stringify(this.CallData));
-		console.log('전화 결과',this.callList);
-	  }
+		console.log('전화 결과', call);
+	}
 }

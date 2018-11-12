@@ -42,5 +42,12 @@ export class MyApp {
 			console.log('strage data null');
 			this.httpService.getUserData();
 		}
+		if (localStorage.getItem('callList')) {
+			console.log('strage data ok');
+		}
+		else {
+			console.log('strage data null');
+			this.httpService.getCallList();
+		}
 	}
 }

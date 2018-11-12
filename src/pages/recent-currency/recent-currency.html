@@ -1,11 +1,52 @@
 <ion-header>
-	<ion-navbar>
+	<ion-navbar no-border-top>
 		<ion-title>
 		</ion-title>
+		<ion-segment [(ngModel)]="call">
+			<ion-segment-button value="sunny" checked value="all">
+				모두
+			</ion-segment-button>
+			<ion-segment-button value="rainy" value="missed">
+				부재중 전화
+			</ion-segment-button>
+		</ion-segment>
+		<ion-buttons end *ngIf="!showDelete">
+				<button ion-button icon-only (click)="editBookmark()" >
+				편집
+				</button>
+			</ion-buttons>
+			<ion-buttons end *ngIf="showDelete">
+				<button ion-button icon-only (click)="doneEdit()" >
+				완료
+				</button>
+			</ion-buttons>
 	</ion-navbar>
 </ion-header>
 
-<ion-content padding>
-	최근 통화ㅇ
+<ion-content>
+	<div [ngSwitch]="call">
+		<ion-list *ngSwitchCase="'all'">
+			<ion-item ion-item *ngFor="let user of CallData" class="currencies-list-item">
+				<button ion-button icon-only (click)="callDataDell(user)" *ngIf="showDelete">
+					<ion-icon name="delete"></ion-icon>
+				</button>
+				{{user.phone}}
+				<button ion-button icon-only (click)="userDetail(user)">
+					<ion-icon name="add"></ion-icon>
+				</button>
+			</ion-item>
+		</ion-list>
 
+		<ion-list *ngSwitchCase="'missed'">
+			<ion-item ion-item *ngFor="let user of callMissed" class="currencies-list-item">
+				<button ion-button icon-only (click)="callDataDell(user)">
+					<ion-icon name="delete"></ion-icon>
+				</button>
+				{{user.phone}}
+				<button ion-button icon-only (click)="userDetail(user)">
+					<ion-icon name="add"></ion-icon>
+				</button>
+			</ion-item>
+		</ion-list>
+	</div>
 </ion-content>
