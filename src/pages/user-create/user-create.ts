@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Camera } from '@ionic-native/camera';
-import { IonicPage, NavController, ViewController,NavParams } from 'ionic-angular';
+import { IonicPage, NavController, ViewController,NavParams,Platform,ActionSheetController } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -16,8 +16,21 @@ export class UserCreatePage {
   //item: any;
 
   form: FormGroup;
+  name:string;
+  job:string;
   phone:string;
-  constructor(public navCtrl: NavController, public viewCtrl: ViewController, formBuilder: FormBuilder, public camera: Camera,public navParams: NavParams) {
+  email:string;
+  website:string;
+  zipcode:string;
+  street:string;
+  suite:string;
+  city:string;
+  company:string;
+  user: any;
+
+  userData: any[] = [];
+
+  constructor(public navCtrl: NavController,public platform: Platform,public actionsheetCtrl: ActionSheetController, public viewCtrl: ViewController, formBuilder: FormBuilder, public camera: Camera,public navParams: NavParams) {
     this.form = formBuilder.group({
       profilePic: [''],
       familyname: [''],
@@ -35,11 +48,32 @@ export class UserCreatePage {
 
 	if (this.navParams.get('phone')) {
 		this.phone=this.navParams.get('phone');
-	}
+  }
+  if (this.navParams.get('user')) {
+    this.user=this.navParams.get('user');
+    console.log('check : ',this.user);
+    this.name=this.user.name;
+    this.job=this.user.job;
+    this.phone=this.user.phone;
+    this.email=this.user.email;
+    this.website=this.user.website;
+    this.zipcode=this.user.address.zipcode;
+    this.street=this.user.address.street;
+    this.suite=this.user.address.suite;
+    this.city=this.user.address.city;
+    this.company=this.user.company.name;
+  }
+  if (this.navParams.get('showDel')) {
+
+  }
     // Watch the form for changes, and
     this.form.valueChanges.subscribe((v) => {
       this.isReadyToSave = this.form.valid;
     });
+  }
+
+  ngOnInit(){
+    this.userData = JSON.parse(localStorage.getItem('content'));
   }
 
   ionViewDidLoad() {
@@ -92,4 +126,44 @@ export class UserCreatePage {
     if (!this.form.valid) { return; }
     this.viewCtrl.dismiss(this.form.value);
   }
+
+  delUser() {
+    for (let i = 0; i < this.userData.length; i++) {
+      if (this.user.id === this.userData[i].id) {
+        this.userData.forEach((v, i, a) => {
+          if (v.id === this.user.id) {
+            a.splice(i, 1);
+          }
+        })
+      }
+    }
+    localStorage.setItem('content', JSON.stringify(this.userData));
+     location.reload();
+  }
+
+  openMenu() {
+		let actionSheet = this.actionsheetCtrl.create({
+			title: '',
+			cssClass: 'action-sheets-basic-page',
+			buttons: [
+				{
+          text: '연락처 삭제',
+          role: 'destructive',
+					icon: !this.platform.is('ios') ? 'heart-outline' : null,
+					handler: () => {
+					  this.delUser();
+					}
+				},
+				{
+					text: '취소',
+					role: 'cancel', // will always sort to be on the bottom
+					icon: !this.platform.is('ios') ? 'close' : null,
+					handler: () => {
+						console.log('Cancel clicked');
+					}
+				}
+			]
+		});
+		actionSheet.present();
+	}
 }

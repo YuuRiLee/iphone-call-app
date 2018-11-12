@@ -38,7 +38,7 @@
 				<ion-input type="text" placeholder="성" formControlName="familyname"></ion-input>
 			</ion-item>
 			<ion-item>
-				<ion-input type="text" placeholder="이름" formControlName="name"></ion-input>
+				<ion-input type="text" placeholder="이름" formControlName="name" value="{{name}}"></ion-input>
 			</ion-item>
 
 			<ion-item>
@@ -46,32 +46,33 @@
 			</ion-item>
 
 			<ion-item>
-				<ion-input type="text" placeholder="이메일" formControlName="email"></ion-input>
+				<ion-input type="text" placeholder="이메일" formControlName="email" value="{{email}}"></ion-input>
 			</ion-item>
 
 			<ion-item>
-				<ion-input type="text" placeholder="홈페이지" formControlName="website"></ion-input>
+				<ion-input type="text" placeholder="홈페이지" formControlName="website" value="{{website}}"></ion-input>
 			</ion-item>
 
 			<ion-item>
-				<ion-input type="text" placeholder="우편번호" formControlName="zipcode"></ion-input>
+				<ion-input type="text" placeholder="우편번호" formControlName="zipcode" value="{{zipcode}}"></ion-input>
 			</ion-item>
 
 			<ion-item>
-				<ion-input type="text" placeholder="거리" formControlName="street"></ion-input>
+				<ion-input type="text" placeholder="거리" formControlName="street" value="{{street}}"></ion-input>
 			</ion-item>
 			<ion-item>
-				<ion-input type="text" placeholder="번지" formControlName="suite"></ion-input>
+				<ion-input type="text" placeholder="번지" formControlName="suite" value="{{suite}}"></ion-input>
 			</ion-item>
 			<ion-item>
-				<ion-input type="text" placeholder="도시" formControlName="city"></ion-input>
+				<ion-input type="text" placeholder="도시" formControlName="city" value="{{city}}"></ion-input>
 			</ion-item>
 
 			<ion-item>
-				<ion-input type="text" placeholder="회사" formControlName="company"></ion-input>
+				<ion-input type="text" placeholder="회사" formControlName="company" value="{{company}}"></ion-input>
 			</ion-item>
 
 
 		</ion-list>
 	</form>
+	<ion-item (click)="openMenu()">연락처 삭제</ion-item>
 </ion-content>

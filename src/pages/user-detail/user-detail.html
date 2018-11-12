@@ -2,6 +2,11 @@
 
 	<ion-navbar>
 		<ion-title></ion-title>
+		<ion-buttons end *ngIf=user.id>
+			<button ion-button icon-only (click)="userUpdate()" >
+			편집
+			</button>
+		</ion-buttons>
 	</ion-navbar>
 
 </ion-header>

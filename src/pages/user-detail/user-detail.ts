@@ -12,6 +12,8 @@ export class UserDetailPage {
 	userData: any[] = [];
 
 	call: any;
+
+	showDelete: boolean = false;
 	constructor(public navCtrl: NavController,public modalCtrl: ModalController, public navParams: NavParams,public actionsheetCtrl: ActionSheetController,public platform: Platform,public alertCtrl: AlertController) {
 		// this.user = navParams.get('user');
 	}
@@ -45,7 +47,7 @@ export class UserDetailPage {
 						phone: '',
 						website: '',
 						company: {
-							company: ''
+							name: ''
 						}
 			};
 		}
@@ -121,7 +123,7 @@ export class UserDetailPage {
 						name: item.familyname + item.name,
 						email: item.email,
 						address: {
-							stree: item.street,
+							street: item.street,
 							suite: item.suite,
 							city: item.city,
 							zipcode: item.zipcode
@@ -129,11 +131,12 @@ export class UserDetailPage {
 						phone: item.phone,
 						website: item.website,
 						company: {
-							company: item.company
+							name: item.company
 						}
 
 					}
 				);
+				
 				//storage update
 				localStorage.setItem('content', JSON.stringify(this.userData));
 				location.reload();
@@ -142,4 +145,58 @@ export class UserDetailPage {
 		addModal.present();
 	}
 
+	editDetail() {
+		this.showDelete = true;
+		
+
+	}
+	doneEdit() {
+		//location.reload();
+		this.userUpdate();
+	}
+
+	userUpdate() {
+		let addModal = this.modalCtrl.create(UserCreatePage, { user:this.user,showDel:true });
+		addModal.onDidDismiss(item => {
+			if (item) {
+				if (item.name == '' && item.familyname == '') {
+					item.name = '이름 없음';
+				}
+				let updateData=
+					{
+						id:this.user.id,
+						name: item.familyname + item.name,
+						email: item.email,
+						address: {
+							street: item.street,
+							suite: item.suite,
+							city: item.city,
+							zipcode: item.zipcode
+						},
+						phone: item.phone,
+						website: item.website,
+						company: {
+							name: item.company
+						}
+
+					};
+				
+					for (let i = 0; i < this.userData.length; i++) {
+						if (this.user.id === this.userData[i].id) {
+							this.userData[i]=updateData;
+						}
+					}
+				//storage update
+				localStorage.setItem('content', JSON.stringify(this.userData));
+				location.reload();
+			}
+		})
+		addModal.present();
+	}
+
+	updateJSON(src, newRecord) {
+		return src.map(function(item) {
+			return (item.year === newRecord.year && item.month === newRecord.month) ? newRecord : item;
+		});
+		}
 }
