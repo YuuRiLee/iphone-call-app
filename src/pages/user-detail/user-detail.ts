@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams,ActionSheetController,Platform,AlertController  } from 'ionic-angular';
-
+import { IonicPage, NavController,ModalController, NavParams,ActionSheetController,Platform,AlertController  } from 'ionic-angular';
+import { UserCreatePage } from '../../pages/user-create/user-create';
 
 @IonicPage()
 @Component({
@@ -10,12 +10,45 @@ import { IonicPage, NavController, NavParams,ActionSheetController,Platform,Aler
 export class UserDetailPage {
 	user: any;
 	userData: any[] = [];
-	constructor(public navCtrl: NavController, public navParams: NavParams,public actionsheetCtrl: ActionSheetController,public platform: Platform,public alertCtrl: AlertController) {
+
+	call: any;
+	constructor(public navCtrl: NavController,public modalCtrl: ModalController, public navParams: NavParams,public actionsheetCtrl: ActionSheetController,public platform: Platform,public alertCtrl: AlertController) {
 		// this.user = navParams.get('user');
 	}
 	ngOnInit() {
 		this.userData = JSON.parse(localStorage.getItem('content'));
+		
+
+		this.call = this.navParams.get('call'); 
+		if(!this.call){ //최신 통화 목록이 아닌 경우
+			this.call={
+				id:'',
+				date:'',
+				time:'',
+				currencyTime:''
+			}
+		}
+
 		this.user = this.navParams.get('user');
+		if(!this.user){ //전화부에 저장되지 않은 경우
+			console.log('nono');
+			this.user={
+				id: '',
+						name: this.call.phone,
+						email: '',
+						address: {
+							street: '',
+							suite: '',
+							city: '',
+							zipcode: ''
+						},
+						phone: '',
+						website: '',
+						company: {
+							company: ''
+						}
+			};
+		}
 	}
 
 	openMenu(contact:any) {
@@ -72,4 +105,40 @@ export class UserDetailPage {
 		location.reload();
 
 	}
+
+
+	userCreate() {
+		let addModal = this.modalCtrl.create(UserCreatePage, { phone: this.call.phone });
+		addModal.onDidDismiss(item => {
+			if (item) {
+				console.log("date 000111" + item.name);
+				if (item.name == '' && item.familyname == '') {
+					item.name = '이름 없음';
+				}
+				this.userData.push(
+					{
+						name: item.familyname + item.name,
+						email: item.email,
+						address: {
+							stree: item.street,
+							suite: item.suite,
+							city: item.city,
+							zipcode: item.zipcode
+						},
+						phone: item.phone,
+						website: item.website,
+						company: {
+							company: item.company
+						}
+
+					}
+				);
+				//storage update
+				localStorage.setItem('content', JSON.stringify(this.userData));
+				location.reload();
+			}
+		})
+		addModal.present();
+	}
+
 }

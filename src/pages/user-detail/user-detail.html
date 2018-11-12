@@ -23,7 +23,7 @@
 				<button ion-button icon-only>
 					<ion-icon name="add"></ion-icon>
 				</button>
-				<p>메사지</p>
+				<p>메세지</p>
 			</div>
 			<div>
 				<button ion-button icon-only>
@@ -46,7 +46,23 @@
 		</div>
 	</div>
 
-	<ion-list class="user-content">
+	<ion-list class="user-content" *ngIf=call.id>
+		<ion-item >
+			<p>{{call.date}}</p>
+			<span>{{call.time}}</span>
+			<span>{{call.currencyTime}}</span>
+		</ion-item>
+
+	</ion-list>
+
+	<ion-list class="user-content" *ngIf=!user.id>
+		<ion-item>연락처 공유</ion-item>
+		<ion-item (click)="userCreate()">새로운 연락처 등록</ion-item>
+		<ion-item>기존의 연락처에 추가</ion-item>
+		<ion-item>이 발신자 차단</ion-item>
+	</ion-list>
+
+	<ion-list class="user-content" *ngIf=user.id>
 		<ion-item *ngIf=user.phone>
 			<p>휴대전화</p>
 			<p>{{user.phone}}</p>

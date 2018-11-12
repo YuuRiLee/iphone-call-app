@@ -103,11 +103,11 @@ export class HomePage {
 				}
 				this.userData.push(
 					{
-						id: this.userData.length + 1,
+						id: Date.now() + Math.random(),
 						name: item.familyname + item.name,
 						email: item.email,
 						address: {
-							stree: item.street,
+							street: item.street,
 							suite: item.suite,
 							city: item.city,
 							zipcode: item.zipcode

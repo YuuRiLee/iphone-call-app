@@ -30,7 +30,8 @@
 				<button ion-button icon-only (click)="callDataDell(user)" *ngIf="showDelete">
 					<ion-icon name="delete"></ion-icon>
 				</button>
-				{{user.phone}}
+				<span *ngIf='user.name'>{{user.name}}</span>
+				<span *ngIf='!user.name'>{{user.phone}}</span>
 				<button ion-button icon-only (click)="userDetail(user)">
 					<ion-icon name="add"></ion-icon>
 				</button>
@@ -39,10 +40,11 @@
 
 		<ion-list *ngSwitchCase="'missed'">
 			<ion-item ion-item *ngFor="let user of callMissed" class="currencies-list-item">
-				<button ion-button icon-only (click)="callDataDell(user)">
+				<button ion-button icon-only (click)="callDataDell(user)" *ngIf="showDelete">
 					<ion-icon name="delete"></ion-icon>
 				</button>
-				{{user.phone}}
+				<span *ngIf='user.name'>{{user.name}}</span>
+				<span *ngIf='!user.name'>{{user.phone}}</span>
 				<button ion-button icon-only (click)="userDetail(user)">
 					<ion-icon name="add"></ion-icon>
 				</button>

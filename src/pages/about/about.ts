@@ -30,7 +30,6 @@ export class AboutPage {
 		let addModal = this.modalCtrl.create(UserCreatePage, { phone: this.phoneNumber });
 		addModal.onDidDismiss(item => {
 			if (item) {
-				console.log("date 000111" + item.name);
 				if (item.name == '' && item.familyname == '') {
 					item.name = '이름 없음';
 				}
@@ -131,23 +130,47 @@ export class AboutPage {
 			console.log('통화기록 ㅐ');
 		}
 
+		const name = this.checkTelSave();
 		const callResult = Math.random() >= 0.5;
 		const d = new Date();
-		let id;
-		// if(this.CallData.length>0){
-		// 	id=this.CallData.length+1;
-		// }
-		id=Date.now() + Math.random();
+		const id=Date.now() + Math.random();
+		let currencyTime;
+		if(callResult){ //전화를 받았을 경우에만 통화시간을 넣어줌
+			currencyTime=(Math.floor(Math.random() * 60) + 1)+'분';
+		}
+		else{
+			currencyTime='부재중 전화';
+		}
 		const call = {
 			id:  id,
-			name: '',
+			name: name,
 			phone: this.phoneNumber,
 			date: d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(),
-			receive: callResult
+			receive: callResult,
+			time : d.getHours()+':'+d.getMinutes(),
+			currencyTime: currencyTime
 		};
 
 		this.CallData.push(call);
 		localStorage.setItem('callList', JSON.stringify(this.CallData));
 		console.log('전화 결과', call);
+		this.phoneNumber='';
+	}
+
+	//전화부에 저장되어 있는지 판단하는 함수
+	checkTelSave(){
+		let inputPhone=this.phoneNumber.replace(/\-/g, "");
+		let bookPhone;
+		for (let i = 0; i < this.userData.length; i++) {
+			bookPhone=this.userData[i].phone.replace(/\-/g, "");
+			// console.log('전화번호 번호 : ',bookPhone);
+			// console.log('입력한 전화번호 : ',inputPhone);
+			if (inputPhone === bookPhone) {
+				console.log('전화부에 등록된 전화번호');
+				return this.userData[i].name;
+			}
+		}
+		console.log('전화부에 등록이 안된 전화번호');
+		return '';
 	}
 }
