@@ -49,6 +49,7 @@ export class UserDetailPage {
 						}
 			};
 		}
+		console.log(this.user.id);
 	}
 
 	openMenu(contact:any) {
@@ -111,12 +112,12 @@ export class UserDetailPage {
 		let addModal = this.modalCtrl.create(UserCreatePage, { phone: this.call.phone });
 		addModal.onDidDismiss(item => {
 			if (item) {
-				console.log("date 000111" + item.name);
 				if (item.name == '' && item.familyname == '') {
 					item.name = '이름 없음';
 				}
 				this.userData.push(
 					{
+						id:Date.now() + Math.random(),
 						name: item.familyname + item.name,
 						email: item.email,
 						address: {

@@ -18,7 +18,7 @@ export class RecentCurrencyPage {
 	this.events.subscribe('recentTabClicked', () => {
 		this.userData = JSON.parse(localStorage.getItem('content'));	
 		this.CallData = JSON.parse(localStorage.getItem('callList'));
-
+		this.checkTelSave();
 	});
 
 	
@@ -29,10 +29,26 @@ export class RecentCurrencyPage {
 
 	console.log('전화 목록들',this.CallData);
 	
-
+	this.checkTelSave();
 	this.getMissedData();
 	console.log('못 받은 목록들',this.callMissed);
+	
   }
+
+
+	checkTelSave(){
+		for (let i = 0; i < this.userData.length; i++) {
+			for (let j = 0; j < this.CallData.length; j++) {
+			if (this.CallData[j].phone.replace(/\-/g, "") === this.userData[i].phone.replace(/\-/g, "")){
+				console.log('같음 : ',this.CallData[j].name);
+				this.CallData[j].name=this.userData[i].name;
+			}
+		}
+		}
+		// console.log('전화부에 등록이 안된 전화번호');
+		// return '';
+	}
+
 
 	getMissedData(){
 		this.callMissed = [];
@@ -78,7 +94,7 @@ userDetail(callUser: any,userDataId:Number) {
 
 	for (let i = 0; i < this.userData.length; i++) {
 		if (callUser.phone.replace(/\-/g, "") === this.userData[i].phone.replace(/\-/g, "")) { //전화부에 등록된 사람은 전화부에 데이터가 필요
-			
+			console.log('전화부에 있음 userData : ',this.userData[i]);
 			return this.navCtrl.push(UserDetailPage, { call:callUser,user: this.userData[i] });
 			
 		}

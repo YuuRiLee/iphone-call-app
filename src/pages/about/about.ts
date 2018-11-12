@@ -130,7 +130,7 @@ export class AboutPage {
 			console.log('통화기록 ㅐ');
 		}
 
-		const name = this.checkTelSave();
+		//const name = this.checkTelSave();
 		const callResult = Math.random() >= 0.5;
 		const d = new Date();
 		const id=Date.now() + Math.random();
@@ -143,7 +143,7 @@ export class AboutPage {
 		}
 		const call = {
 			id:  id,
-			name: name,
+			name: '',
 			phone: this.phoneNumber,
 			date: d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(),
 			receive: callResult,
@@ -158,19 +158,19 @@ export class AboutPage {
 	}
 
 	//전화부에 저장되어 있는지 판단하는 함수
-	checkTelSave(){
-		let inputPhone=this.phoneNumber.replace(/\-/g, "");
-		let bookPhone;
-		for (let i = 0; i < this.userData.length; i++) {
-			bookPhone=this.userData[i].phone.replace(/\-/g, "");
-			// console.log('전화번호 번호 : ',bookPhone);
-			// console.log('입력한 전화번호 : ',inputPhone);
-			if (inputPhone === bookPhone) {
-				console.log('전화부에 등록된 전화번호');
-				return this.userData[i].name;
-			}
-		}
-		console.log('전화부에 등록이 안된 전화번호');
-		return '';
-	}
+	// checkTelSave(){
+	// 	let inputPhone=this.phoneNumber.replace(/\-/g, "");
+	// 	let bookPhone;
+	// 	for (let i = 0; i < this.userData.length; i++) {
+	// 		bookPhone=this.userData[i].phone.replace(/\-/g, "");
+	// 		// console.log('전화번호 번호 : ',bookPhone);
+	// 		// console.log('입력한 전화번호 : ',inputPhone);
+	// 		if (inputPhone === bookPhone) {
+	// 			console.log('전화부에 등록된 전화번호');
+	// 			return this.userData[i].name;
+	// 		}
+	// 	}
+	// 	console.log('전화부에 등록이 안된 전화번호');
+	// 	return '';
+	// }
 }
