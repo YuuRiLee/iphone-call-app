@@ -4,7 +4,6 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
 import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { UserDetailPage } from "../pages/user-detail/user-detail";
@@ -28,7 +27,6 @@ import { BookmarkAddPage } from '../pages/bookmarkAdd/bookmarkAdd';
 	declarations: [
 		MyApp,
 		AboutPage,
-		ContactPage,
 		HomePage,
 		TabsPage,
 		UserDetailPage,
@@ -49,7 +47,6 @@ import { BookmarkAddPage } from '../pages/bookmarkAdd/bookmarkAdd';
 	entryComponents: [
 		MyApp,
 		AboutPage,
-		ContactPage,
 		HomePage,
 		TabsPage,
 		UserDetailPage,

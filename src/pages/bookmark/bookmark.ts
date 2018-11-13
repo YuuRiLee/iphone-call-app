@@ -15,10 +15,7 @@ export class BookmarkPage {
 	constructor(public navCtrl: NavController,
 		public navParams: NavParams,
 		private serviceProvider: ServiceProvider) {
-		// this.user = navParams.get('user');
 
-
-		// this.eventsListener();
 		this.serviceProvider.userCast.subscribe(data => {
 			if(data) {
 				this.userData = data;
@@ -26,38 +23,18 @@ export class BookmarkPage {
 			}
 		});
 
-		console.log('즐겨찾기 목록',this.bookmarkUserData);
 	}
 
-
-	// eventsListener() {
-	// 	this.events.subscribe('bookmark:add', () => {
-	// 		this.getBookmarkUserData();
-	// 	})
-	// }
-
-	// ngOnInit() {
-	// 	this.getBookmarkUserData();
-	// }
-
-
 	getBookmarkUserData() {
-		console.log('checkcheck>>userData',this.userData);
-		//this.userData = JSON.parse(localStorage.getItem('content'));
 		this.user = this.navParams.get('user');
 		this.bookmarkUserData = [];
 
-		// this.userData.forEach(function(v,i){
-		// 	console.log(v.bookMarkCheck);
-		// 	if
-		// });
 		for (let i = 0; i < this.userData.length; i++) {
 			if (this.userData[i].bookMarkCheck === true) {
 				this.bookmarkUserData.push(this.userData[i]);
 			}
 		}
 	}
-
 
 	userDetail(user: object) {
 		this.navCtrl.push(UserDetailPage, { user: user });
@@ -68,13 +45,11 @@ export class BookmarkPage {
 
 	}
 	doneEdit() {
-		//location.reload();
 		this.showDelete = false;
 	}
 	bookmarkDel(data: any) {
 		for (let i = 0; i < this.userData.length; i++) {
 			if (data.id === this.userData[i].id) {
-				console.log('same');
 				this.userData[i].bookMarkCheck = false;
 				this.bookmarkUserData.forEach((v, i, a) => {
 					if (v.id === data.id) {
@@ -83,10 +58,7 @@ export class BookmarkPage {
 				})
 			}
 		}
-		console.log(this.userData);
 		this.serviceProvider.SetUserData(this.userData);
-		//localStorage.setItem('content', JSON.stringify(this.userData));
-		// location.reload();
 	}
 
 	addBookmark(){

@@ -2,7 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Camera } from '@ionic-native/camera';
 import { IonicPage, NavController, ViewController, NavParams, Platform, ActionSheetController } from 'ionic-angular';
-import { ServiceProvider } from '../../providers/http-service/http-service';
 @IonicPage()
 @Component({
 	selector: 'page-user-create',
@@ -37,8 +36,7 @@ export class UserCreatePage {
 		public viewCtrl: ViewController,
 		public formBuilder: FormBuilder,
 		public camera: Camera,
-		public navParams: NavParams,
-		public serviceProvider : ServiceProvider
+		public navParams: NavParams
 	) {
 		this.form = formBuilder.group({
 			profilePic: [''],
@@ -129,21 +127,6 @@ export class UserCreatePage {
 		this.viewCtrl.dismiss(this.form.value);
 	}
 
-	delUser() {
-		for (let i = 0; i < this.userData.length; i++) {
-			if (this.user.id === this.userData[i].id) {
-				this.userData.forEach((v, i, a) => {
-					if (v.id === this.user.id) {
-						a.splice(i, 1);
-					}
-				})
-			}
-		}
-		this.serviceProvider.SetUserData(this.userData);
-		//location.reload();
-		this.viewCtrl.dismiss('userdeleted');
-	}
-
 	openMenu() {
 		let actionSheet = this.actionsheetCtrl.create({
 			title: '',
@@ -154,7 +137,7 @@ export class UserCreatePage {
 					role: 'destructive',
 					icon: !this.platform.is('ios') ? 'heart-outline' : null,
 					handler: () => {
-						this.delUser();
+						this.viewCtrl.dismiss('userdeleted');
 					}
 				},
 				{

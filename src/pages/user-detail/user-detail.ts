@@ -42,7 +42,6 @@ export class UserDetailPage {
 
 		this.user = this.navParams.get('user');
 		if (!this.user) { //전화부에 저장되지 않은 경우
-			console.log('nono');
 			this.user = {
 				id: '',
 				name: this.call.phone,
@@ -101,9 +100,7 @@ export class UserDetailPage {
 	addBookMark() {
 		for (let i = 0; i < this.userData.length; i++) {
 			if (this.user.id === this.userData[i].id) {
-				console.log('same');
 				if (this.userData[i].bookMarkCheck === true) {
-					console.log('이미 즐겨찾기에 추가됨');
 					this.presentAlert();
 					return;
 				}
@@ -111,45 +108,20 @@ export class UserDetailPage {
 				this.userData[i].bookMarkCheck = true;
 			}
 		}
-		console.log(this.userData);
 		this.serviceProvider.SetUserData(this.userData);
-		// location.reload();
-
 	}
 
-
 	userCreate() {
-		let addModal = this.modalCtrl.create(UserCreatePage, { phone: this.call.phone });
+		let addModal = this.modalCtrl.create(UserCreatePage, {phone: this.call.phone });
 		addModal.onDidDismiss(item => {
-			if (item) {
-				if (item.name == '' && item.familyname == '') {
-					item.name = '이름 없음';
-				}
+			 if (item) {
+				let data=this.serviceProvider.makeData(item,this.user.id);
 
-				const userData = {
-					id: Date.now() + Math.random(),
-					name: item.familyname + item.name,
-					email: item.email,
-					address: {
-						street: item.street,
-						suite: item.suite,
-						city: item.city,
-						zipcode: item.zipcode
-					},
-					phone: item.phone,
-					website: item.website,
-					company: {
-						name: item.company
-					}
-
-				};
-
-
-				this.userData.push(userData);
-
-				//storage update
+				this.userData.push(data);
+				
+				this.serviceProvider.sort(this.userData);
 				this.serviceProvider.SetUserData(this.userData);
-				this.user = userData;
+				this.user = data;
 			}
 		})
 		addModal.present();
@@ -157,58 +129,47 @@ export class UserDetailPage {
 
 	editDetail() {
 		this.showDelete = true;
-
-
 	}
 	doneEdit() {
-		//location.reload();
 		this.userUpdate();
 	}
 
 	userUpdate() {
 		let addModal = this.modalCtrl.create(UserCreatePage, { user: this.user, showDel: true });
 		addModal.onDidDismiss(item => {
-
-			console.log(item);
-
 			if (item && item === 'userdeleted') {
 				this.navCtrl.pop();
+				this.delUser();
 			} else if (item) {
-				if (item.name == '' && item.familyname == '') {
-					item.name = '이름 없음';
-				}
-				let updateData =
-				{
-					id: this.user.id,
-					name: item.familyname + item.name,
-					email: item.email,
-					address: {
-						street: item.street,
-						suite: item.suite,
-						city: item.city,
-						zipcode: item.zipcode
-					},
-					phone: item.phone,
-					website: item.website,
-					company: {
-						name: item.company
-					}
-
-				};
+				let updateData=this.serviceProvider.makeData(item,this.user.id);
 
 				for (let i = 0; i < this.userData.length; i++) {
 					if (this.user.id === this.userData[i].id) {
 						this.userData[i] = updateData;
 					}
 				}
-				//storage update
+				
+				this.serviceProvider.sort(this.userData);
 				this.serviceProvider.SetUserData(this.userData);
-				// location.reload();
 				this.user = updateData;
 			}
 		})
 		addModal.present();
 	}
+
+	delUser() {
+		for (let i = 0; i < this.userData.length; i++) {
+			if (this.user.id === this.userData[i].id) {
+				this.userData.forEach((v, i, a) => {
+					if (v.id === this.user.id) {
+						a.splice(i, 1);
+					}
+				})
+			}
+		}
+		this.serviceProvider.SetUserData(this.userData);
+	}
+
 
 	updateJSON(src, newRecord) {
 		return src.map(function (item) {

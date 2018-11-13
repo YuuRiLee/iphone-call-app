@@ -24,9 +24,6 @@ export class AboutPage {
 		private serviceProvider: ServiceProvider
 		) {
 
-	}
-
-	ngOnInit() {
 		this.phoneNumber = '';
 		this.serviceProvider.userCast.subscribe(data => {
 			if(data) {
@@ -39,9 +36,6 @@ export class AboutPage {
 				this.CallData = data;
 			}
 		});
-		//this.userData = JSON.parse(localStorage.getItem('content'));
-		//this.CallData = JSON.parse(localStorage.getItem('callList'));
-
 	}
 
 	userCreate() {
@@ -66,8 +60,6 @@ export class AboutPage {
 	}
 
 	deleteNumber() {
-
-		console.log('삭제');
 		this.phoneNumber = this.phoneNumber.slice(0, -1);
 	}
 	replaceAll(org, dest, str) {
@@ -86,7 +78,6 @@ export class AboutPage {
 					text: '새로운 연락처 등록',
 					icon: !this.platform.is('ios') ? 'share' : null,
 					handler: () => {
-						console.log('Share clicked');
 						this.userCreate();
 					}
 				},
@@ -112,15 +103,7 @@ export class AboutPage {
 
 	call() {
 		if (!this.phoneNumber) return; //번호를 입력해야만 전화를 걸 수 있음
-		console.log('저장된 기록들', this.CallData);
-		if (localStorage.getItem('callList')) {
-			console.log('통화 기록이 없습니다');
-		}
-		else {
-			console.log('통화기록 ㅐ');
-		}
-
-		//const name = this.checkTelSave();
+		
 		const callResult = Math.random() >= 0.5;
 		const d = new Date();
 		const id=Date.now() + Math.random();
@@ -142,10 +125,7 @@ export class AboutPage {
 		};
 
 		this.CallData.push(call);
-		console.log('데이터 확인',this.CallData);
 		this.serviceProvider.SetCallData(this.CallData);
-		//localStorage.setItem('callList', JSON.stringify(this.CallData));
-		console.log('전화 결과', call);
 		this.phoneNumber='';
 	}
 }

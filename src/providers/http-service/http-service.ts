@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NavController, ModalController, Item, Events } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
 import { stringify } from '@angular/core/src/render3/util';
 import { UserCreatePage } from '../../pages/user-create/user-create';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -11,10 +12,11 @@ import { Storage } from '@ionic/storage';
 
 @Injectable()
 export class ServiceProvider {
-
+	@ViewChild('myNav') nav: NavController
 	userData: any = [];
 	callList: any = [];
 
+	
 	public user$ = new BehaviorSubject<any>([]);
 	userCast = this.user$.asObservable();
 
@@ -34,9 +36,11 @@ export class ServiceProvider {
 	dataInit() {
 
 		this.localStorage.get('callList').then((val) => {
-			console.log('chechpoint  callList:', val);
-			this.callList = JSON.parse(val) ? val : []
-			this.callLis$.next(this.callList);
+			
+			this.callList = val ? val : [];
+			console.log('chechpoint  callList:', this.callList);
+			this.SetCallData(this.callList);
+			//this.callLis$.next(this.callList);
 		});
 		this.localStorage.get('content').then((val) => {
 			this.userData = val ? JSON.parse(val) : [];
@@ -49,6 +53,7 @@ export class ServiceProvider {
 					var textB = b.name.toUpperCase();
 					return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
 				})
+				console.log('chechpoint  userData:', this.userData);
 				// this.localStorage.set('content', this.userData);
 				// this.user$.next(this.userData);
 				this.SetUserData(this.userData);
@@ -58,7 +63,7 @@ export class ServiceProvider {
 
 
 	getUserDataFromApi() {
-		console.log('음 한 번만');
+		console.log('처음 한 번만');
 		this.http.get('https://jsonplaceholder.typicode.com/users')
 			.subscribe((data: Array<any>) => {
 				this.userData = data;
@@ -74,65 +79,122 @@ export class ServiceProvider {
 		this.user$.next(userList);
 	}
 	SetCallData(callData: any) {
-		this.localStorage.set('callList', JSON.stringify(callData));
+		this.localStorage.set('callList', callData);
 		this.callLis$.next(callData);
 	}
 
-	userCreate(data: object, phone?: String, user?: object): void {
+	userCreate(data: object, phone?: String): any {
 		let addModal;
+		let detailData;
 		if (phone) {
-			console.log('전화번호만 있는 경우');
+			console.log('case1');
 			addModal = this.modalCtrl.create(UserCreatePage, { phone: phone });
 		}
-		else if (user) {
-			console.log('nono');
-		}
 		else { //data만 있는 경우
-			console.log('data만 있는 경우');
+			console.log('case3');
 			addModal = this.modalCtrl.create(UserCreatePage);
 		}
 
-
 		addModal.onDidDismiss(item => {
 			if (item) {
-				if (item.name == '' && item.familyname == '') {
-					item.name = '이름 없음';
-				}
+				detailData=this.makeData(item);
+				this.userData.push(detailData);
 
-				console.log('---checkoint1-----');
-				console.log(this.userData);
+				this.sort(this.userData);
 
-
-				this.userData.push(
-					{
-						id: Date.now() + Math.random(),
-						name: item.familyname + item.name,
-						email: item.email,
-						address: {
-							street: item.street,
-							suite: item.suite,
-							city: item.city,
-							zipcode: item.zipcode
-						},
-						phone: item.phone,
-						website: item.website,
-						company: {
-							company: item.company
-						}
-
-					}
-				);
-				console.log('check>>>', this.userData);
-				this.userData.sort(function (a, b) {
-					var textA = a.name.toUpperCase();
-					var textB = b.name.toUpperCase();
-					return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-				})
-				this.user$.next(this.userData);
-
+				this.SetUserData(this.userData);
 			}
 		})
 		addModal.present();
+		
+	}
+
+	sort(data){
+		data.sort(function (a, b) {
+			var textA = a.name.toUpperCase();
+			var textB = b.name.toUpperCase();
+			return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+		})
+	}
+	makeData(item, userid?:string){
+		let id;
+		if(userid){
+			console.log('편집 데이터 만듬');
+			id=userid;
+		}
+		else{
+			console.log('새로운 데이터 만듬');
+			id=Date.now() + Math.random()
+		}
+		if (item.name == '' && item.familyname == '') {
+			item.name = '이름 없음';
+		}
+		const data ={
+				id: id,
+				name: item.familyname + item.name,
+				email: item.email,
+				address: {
+					street: item.street,
+					suite: item.suite,
+					city: item.city,
+					zipcode: item.zipcode
+				},
+				phone: item.phone,
+				website: item.website,
+				company: {
+					company: item.company
+				}
+
+			};
+
+			return data;
+	}
+	
+
+	groupContacts(contacts) {
+		let sorted: any[] = [];
+		contacts.forEach((c, ci, ca) => {
+			if (sorted.length === 0) {
+				sorted.push({
+					letter: c.name.charAt(0),
+					contacts: [c]
+				});
+			} else {
+				let firstLetter = c.name.charAt(0);
+				let found = false;
+				sorted.forEach((v, i, a) => {
+					if (v.letter === firstLetter) {
+						found = true;
+
+						a[i].contacts.push(c);
+
+					}
+				});
+
+				if (!found) {
+					sorted.push({
+						letter: c.name.charAt(0),
+						contacts: [c]
+					});
+				}
+			}
+		})
+
+		return sorted;
+	}
+
+	getItems(ev,groupedContacts) {
+		let val = ev.target.value;
+
+		if (val && val.trim() != '') {
+			groupedContacts = groupedContacts.filter((item) => {
+				for (let i = 0; i < item.contacts.length; i++) {
+					console.log(item.contacts[i].name);
+					return (item.contacts[i].name.toLowerCase().indexOf(val.toLowerCase()) > -1);
+				}
+			})
+		}//end if
+		return groupedContacts;
 	}
 
 }

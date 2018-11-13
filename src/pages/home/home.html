@@ -22,14 +22,6 @@
 </ion-header>
 
 <ion-content>
-	<!-- <ion-item-group>
-    <ion-item-divider color="light">A</ion-item-divider>
-    <ion-list no-lines>
-      <ion-item ion-item *ngFor="let user of userData" (click)="userDetail(user)" class="currencies-list-item">
-       <p>{{user.name}}</p>
-      </ion-item>
-    </ion-list>
-  </ion-item-group> -->
 	<ion-list>
 		<ion-item-group *ngFor="let group of groupedContacts">
 
@@ -38,9 +30,4 @@
 
 		</ion-item-group>
 	</ion-list>
-	<!-- <ion-list *ngIf="searchVal">
-		<ion-item *ngFor="let item of items" (click)="userDetail(item)">
-			{{ item.name }}
-		</ion-item>
-	</ion-list> -->
 </ion-content>

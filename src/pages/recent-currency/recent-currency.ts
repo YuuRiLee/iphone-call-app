@@ -9,8 +9,8 @@ import { ServiceProvider } from '../../providers/http-service/http-service';
 })
 export class RecentCurrencyPage {
   user: any;
-  userData: any[]=[];
-  CallData: any[]=[];
+  userData: any=[];
+  CallData: any;
   callMissed: any[] = [];
   showDelete: boolean = false;
   call = 'all';
@@ -23,27 +23,25 @@ export class RecentCurrencyPage {
 	this.serviceProvider.userCast.subscribe(data => {
 		if(data) {
 			this.userData = data;
+			this.checkTelSave();
 		}
 	});
 
 	this.serviceProvider.callListCast.subscribe(data => {
 		if(data) {
 			this.CallData = data;
+			this.getMissedData();
 		}
 	});
-
 	this.checkTelSave();
 	this.getMissedData();
-	
   }
-
 
 	checkTelSave(){
 		for (let i = 0; i < this.userData.length; i++) {
-			for (let j = 0; j < this.CallData.length; j++) {
-			if (this.CallData[j].phone.replace(/\-/g, "") === this.userData[i].phone.replace(/\-/g, "")){
-				console.log('같음 : ',this.CallData[j].name);
-				this.CallData[j].name=this.userData[i].name;
+			for (let j = 0; j < this.serviceProvider.callList.length; j++) {
+			if (this.serviceProvider.callList[j].phone.replace(/\-/g, "") === this.userData[i].phone.replace(/\-/g, "")){
+				this.serviceProvider.callList[j].name=this.userData[i].name;
 			}
 		}
 		}
@@ -67,8 +65,6 @@ doneEdit() {
 callDataDell(data: any) {
 	for (let i = 0; i < this.CallData.length; i++) {
 		if (data.id === this.CallData[i].id) {
-			console.log('same');
-			//this.CallData[i].receive = false;
 			this.CallData.forEach((v, i, a) => {
 				if (v.id === data.id) {
 					a.splice(i, 1);
@@ -78,18 +74,15 @@ callDataDell(data: any) {
 						}
 					})
 				}
-				this.getMissedData()
+				this.getMissedData();
 			})
 		}
 	}
-	console.log(this.CallData);
 	this.serviceProvider.SetCallData(this.CallData);
-	//localStorage.setItem('callList', JSON.stringify(this.CallData));
 }
 userDetail(callUser: any) {
 	for (let i = 0; i < this.userData.length; i++) {
 		if (callUser.phone.replace(/\-/g, "") === this.userData[i].phone.replace(/\-/g, "")) { //전화부에 등록된 사람은 전화부에 데이터가 필요
-			console.log('전화부에 있음 userData : ',this.userData[i]);
 			return this.navCtrl.push(UserDetailPage, { call:callUser,user: this.userData[i] });
 			
 		}
