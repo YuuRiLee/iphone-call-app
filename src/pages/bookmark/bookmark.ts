@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, Events } from 'ionic-angular';
 import { UserDetailPage } from '../../pages/user-detail/user-detail';
 import { BookmarkAddPage } from '../bookmarkAdd/bookmarkAdd';
 @Component({
@@ -11,12 +11,30 @@ export class BookmarkPage {
 	userData: any[] = [];
 	bookmarkUserData: any[] = [];
 	showDelete: boolean = false;
-	constructor(public navCtrl: NavController, public navParams: NavParams) {
+	constructor(public navCtrl: NavController, public navParams: NavParams, private events: Events) {
 		// this.user = navParams.get('user');
+
+
+		this.eventsListener();
 	}
+
+
+	eventsListener() {
+		this.events.subscribe('bookmark:add', () => {
+			this.getBookmarkUserData();
+		})
+	}
+
 	ngOnInit() {
+		this.getBookmarkUserData();
+	}
+
+
+
+	getBookmarkUserData() {
 		this.userData = JSON.parse(localStorage.getItem('content'));
 		this.user = this.navParams.get('user');
+		this.bookmarkUserData = [];
 
 		// this.userData.forEach(function(v,i){
 		// 	console.log(v.bookMarkCheck);

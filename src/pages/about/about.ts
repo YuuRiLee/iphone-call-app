@@ -53,7 +53,7 @@ export class AboutPage {
 				);
 				//storage update
 				localStorage.setItem('content', JSON.stringify(this.userData));
-				location.reload();
+				this.phoneNumber='';
 			}
 		})
 		addModal.present();

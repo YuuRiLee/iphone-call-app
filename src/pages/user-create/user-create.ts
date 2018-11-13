@@ -138,7 +138,8 @@ export class UserCreatePage {
       }
     }
     localStorage.setItem('content', JSON.stringify(this.userData));
-     location.reload();
+	 //location.reload();
+	 this.viewCtrl.dismiss('userdeleted');
   }
 
   openMenu() {

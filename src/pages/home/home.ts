@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController, Item } from 'ionic-angular';
+import { NavController, ModalController, Item, Events } from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import { UserDetailPage } from '../../pages/user-detail/user-detail';
 import { UserCreatePage } from '../../pages/user-create/user-create';
@@ -18,21 +18,33 @@ export class HomePage {
 	groupedContacts: any[] = [];
 	//nameArray: string[] = [];
 
-	searchArr:any[]=[];
+	searchArr: any[] = [];
 	items;
 	searchVal: string;
 
 
 	sorted: any[] = [];
 
-	constructor(public navCtrl: NavController, public modalCtrl: ModalController) {
+	constructor(public navCtrl: NavController, public modalCtrl: ModalController, private events: Events) {
 
 		this.initializeItems();
+		this.eventsListener();
+	}
+
+
+	eventsListener() {
+
+		this.events.subscribe('userupdate:userdetail', () => {
+
+			console.log('------checkpoint1-----');
+
+			this.initUserContacts();
+		});
 	}
 
 	// groupContacts(contacts) {
 	groupContacts(contacts) {
-
+		this.sorted = [];
 		contacts.forEach((c, ci, ca) => {
 			if (this.sorted.length === 0) {
 				this.sorted.push({
@@ -65,13 +77,18 @@ export class HomePage {
 		this.groupedContacts = this.sorted;
 		console.log('sorted contacts: ', this.sorted);
 		console.log('sorted contacts: ', this.groupedContacts);
-		this.searchArr=this.groupedContacts;
+		this.searchArr = this.groupedContacts;
 
 	}
 
 
 	ngOnInit() {
 		this.searchVal = '';
+		this.initUserContacts();
+	}
+
+
+	initUserContacts() {
 		this.userData = JSON.parse(localStorage.getItem('content'));
 
 		this.userData.sort(function (a, b) {
@@ -89,6 +106,7 @@ export class HomePage {
 		// this.groupContacts(this.nameArray); //divder 만들기
 		this.groupContacts(this.userData); //divder 만들기
 	}
+
 
 	userDetail(user: object) {
 		this.navCtrl.push(UserDetailPage, { user: user });
@@ -122,8 +140,8 @@ export class HomePage {
 				);
 				//storage update
 				localStorage.setItem('content', JSON.stringify(this.userData));
-
-				location.reload();
+				this.initUserContacts();
+				// location.reload();
 			}
 		})
 		addModal.present();
@@ -132,7 +150,7 @@ export class HomePage {
 
 	initializeItems() {
 		this.searchVal = '';
-		this.groupedContacts=this.searchArr;
+		this.groupedContacts = this.searchArr;
 	}
 	getItems(ev) {
 		// Reset items back to all of the items
@@ -144,7 +162,7 @@ export class HomePage {
 		if (val && val.trim() != '') {
 			this.groupedContacts = this.groupedContacts.filter((item) => {
 				//return (item.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
-				for(let i=0;i<item.contacts.length;i++){
+				for (let i = 0; i < item.contacts.length; i++) {
 					console.log(item.contacts[i].name);
 					return (item.contacts[i].name.toLowerCase().indexOf(val.toLowerCase()) > -1);
 				}
