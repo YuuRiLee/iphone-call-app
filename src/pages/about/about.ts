@@ -4,6 +4,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { UserCreatePage } from '../../pages/user-create/user-create';
 import { HomePage } from '../../pages/home/home';
+import { ServiceProvider } from '../../providers/http-service/http-service';
 import { first } from 'rxjs/operators';
 @Component({
 	selector: 'page-about',
@@ -15,7 +16,7 @@ export class AboutPage {
 	CallData: any;
 	callList: any[] = [];
 
-	constructor(public navCtrl: NavController, public modalCtrl: ModalController, public actionsheetCtrl: ActionSheetController, public platform: Platform) {
+	constructor(public navCtrl: NavController, public modalCtrl: ModalController, public actionsheetCtrl: ActionSheetController, public platform: Platform,private serviceProvider: ServiceProvider) {
 
 	}
 
@@ -27,37 +28,42 @@ export class AboutPage {
 	}
 
 	userCreate() {
-		let addModal = this.modalCtrl.create(UserCreatePage, { phone: this.phoneNumber });
-		addModal.onDidDismiss(item => {
-			if (item) {
-				if (item.name == '' && item.familyname == '') {
-					item.name = '이름 없음';
-				}
-				this.userData.push(
-					{
-						name: item.familyname + item.name,
-						email: item.email,
-						address: {
-							stree: item.street,
-							suite: item.suite,
-							city: item.city,
-							zipcode: item.zipcode
-						},
-						phone: item.phone,
-						website: item.website,
-						company: {
-							company: item.company
-						}
-
-					}
-				);
-				//storage update
-				localStorage.setItem('content', JSON.stringify(this.userData));
-				this.phoneNumber='';
-			}
-		})
-		addModal.present();
+		this.serviceProvider.userCreate(this.userData,this.phoneNumber);
+		this.phoneNumber='';
 	}
+
+	// userCreate() {
+	// 	let addModal = this.modalCtrl.create(UserCreatePage, { phone: this.phoneNumber });
+	// 	addModal.onDidDismiss(item => {
+	// 		if (item) {
+	// 			if (item.name == '' && item.familyname == '') {
+	// 				item.name = '이름 없음';
+	// 			}
+	// 			this.userData.push(
+	// 				{
+	// 					name: item.familyname + item.name,
+	// 					email: item.email,
+	// 					address: {
+	// 						stree: item.street,
+	// 						suite: item.suite,
+	// 						city: item.city,
+	// 						zipcode: item.zipcode
+	// 					},
+	// 					phone: item.phone,
+	// 					website: item.website,
+	// 					company: {
+	// 						company: item.company
+	// 					}
+
+	// 				}
+	// 			);
+	// 			//storage update
+	// 			localStorage.setItem('content', JSON.stringify(this.userData));
+	// 			this.phoneNumber='';
+	// 		}
+	// 	})
+	// 	addModal.present();
+	// }
 
 	buttonClick(number: string) {
 		if (this.phoneNumber.length == 3) {

@@ -10,12 +10,14 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { UserDetailPage } from "../pages/user-detail/user-detail";
 import { UserCreatePage } from "../pages/user-create/user-create";
 
+import { IonicStorageModule } from '@ionic/storage';
+
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Camera } from '@ionic-native/camera';
 
 import { HttpModule } from '@angular/http';
-import { HttpServiceProvider } from '../providers/http-service/http-service';
+import { ServiceProvider } from '../providers/http-service/http-service';
 import { HttpClientModule } from '@angular/common/http';
 import { BookmarkPage } from '../pages/bookmark/bookmark';
 import { RecentCurrencyPage } from '../pages/recent-currency/recent-currency';
@@ -40,7 +42,8 @@ import { BookmarkAddPage } from '../pages/bookmarkAdd/bookmarkAdd';
 		BrowserModule,
 		HttpModule,
 		HttpClientModule,
-		IonicModule.forRoot(MyApp)
+		IonicModule.forRoot(MyApp),
+		IonicStorageModule.forRoot()
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [
@@ -60,7 +63,7 @@ import { BookmarkAddPage } from '../pages/bookmarkAdd/bookmarkAdd';
 		StatusBar,
 		SplashScreen,
 		{ provide: ErrorHandler, useClass: IonicErrorHandler },
-		HttpServiceProvider,
+		ServiceProvider,
 		Camera
 	]
 })

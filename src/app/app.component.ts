@@ -6,7 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { TabsPage } from '../pages/tabs/tabs';
 
 
-import { HttpServiceProvider } from '../providers/http-service/http-service';
+import { ServiceProvider } from '../providers/http-service/http-service';
 
 @Component({
 	templateUrl: 'app.html'
@@ -14,13 +14,12 @@ import { HttpServiceProvider } from '../providers/http-service/http-service';
 export class MyApp {
 
 	rootPage: any = TabsPage;
-	userData: string;
-
+	
 	constructor(
 		public platform: Platform,
 		public statusBar: StatusBar,
 		public splashScreen: SplashScreen,
-		public httpService: HttpServiceProvider
+		public httpService: ServiceProvider
 	) {
 
 		platform.ready().then(() => {
@@ -35,19 +34,21 @@ export class MyApp {
 
 
 	startApp() {
-		if (localStorage.getItem('content')) {
-			console.log('strage data ok');
-		}
-		else {
-			console.log('strage data null');
-			this.httpService.getUserData();
-		}
-		if (localStorage.getItem('callList')) {
-			console.log('strage data ok');
-		}
-		else {
-			console.log('strage data null');
-			this.httpService.getCallList();
-		}
+		// if (localStorage.getItem('content')) {
+		// 	console.log('strage data ok');
+		// }
+		// else {
+		// 	console.log('strage data null');
+		// 	this.httpService.dataInit();
+		// }
+
+		// if (localStorage.getItem('callList')) {
+		// 	console.log('strage data ok');
+		// }
+		// else {
+		// 	console.log('strage data null');
+		// 	this.httpService.getCallList();
+		// }
+		this.httpService.dataInit();
 	}
 }

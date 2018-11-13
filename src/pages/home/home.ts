@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { NavController, ModalController, Item, Events } from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import { UserDetailPage } from '../../pages/user-detail/user-detail';
-import { UserCreatePage } from '../../pages/user-create/user-create';
+
+import { ServiceProvider } from '../../providers/http-service/http-service';
 
 @Component({
 	selector: 'page-home',
@@ -25,25 +26,27 @@ export class HomePage {
 
 	sorted: any[] = [];
 
-	constructor(public navCtrl: NavController, public modalCtrl: ModalController, private events: Events) {
-
+	constructor(
+		public navCtrl: NavController, 
+		private events: Events, 
+		private serviceProvider: ServiceProvider
+	) {
 		this.initializeItems();
-		this.eventsListener();
-	}
 
-
-	eventsListener() {
-
-		this.events.subscribe('userupdate:userdetail', () => {
-
-			console.log('------checkpoint1-----');
-
-			this.initUserContacts();
+		this.serviceProvider.userCast.subscribe(data => {
+			if(data) {
+				this.userData = data;
+				this.groupContacts(this.userData);
+			}
 		});
 	}
 
+
 	// groupContacts(contacts) {
 	groupContacts(contacts) {
+
+		if (!contacts) return;
+
 		this.sorted = [];
 		contacts.forEach((c, ci, ca) => {
 			if (this.sorted.length === 0) {
@@ -75,79 +78,17 @@ export class HomePage {
 
 
 		this.groupedContacts = this.sorted;
-		console.log('sorted contacts: ', this.sorted);
-		console.log('sorted contacts: ', this.groupedContacts);
+		// console.log('sorted contacts: ', this.sorted);
+		// console.log('sorted contacts: ', this.groupedContacts);
 		this.searchArr = this.groupedContacts;
 
 	}
-
-
-	ngOnInit() {
-		this.searchVal = '';
-		this.initUserContacts();
-	}
-
-
-	initUserContacts() {
-		this.userData = JSON.parse(localStorage.getItem('content'));
-
-		this.userData.sort(function (a, b) {
-			var textA = a.name.toUpperCase();
-			var textB = b.name.toUpperCase();
-			return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-		})
-
-
-		console.log(this.userData);
-
-		// for (let i = 0; i < this.userData.length; i++) {
-		// 	this.nameArray.push(this.userData[i].name);
-		// }
-		// this.groupContacts(this.nameArray); //divder 만들기
-		this.groupContacts(this.userData); //divder 만들기
-	}
-
-
 	userDetail(user: object) {
 		this.navCtrl.push(UserDetailPage, { user: user });
 	}
-	public userCreate() {
-		let addModal = this.modalCtrl.create(UserCreatePage);
-		addModal.onDidDismiss(item => {
-			if (item) {
-				console.log("date 000111" + item.name);
-				if (item.name == '' && item.familyname == '') {
-					item.name = '이름 없음';
-				}
-				this.userData.push(
-					{
-						id: Date.now() + Math.random(),
-						name: item.familyname + item.name,
-						email: item.email,
-						address: {
-							street: item.street,
-							suite: item.suite,
-							city: item.city,
-							zipcode: item.zipcode
-						},
-						phone: item.phone,
-						website: item.website,
-						company: {
-							company: item.company
-						}
-
-					}
-				);
-				//storage update
-				localStorage.setItem('content', JSON.stringify(this.userData));
-				this.initUserContacts();
-				// location.reload();
-			}
-		})
-		addModal.present();
+	userCreate() {
+		this.serviceProvider.userCreate(this.userData);
 	}
-
-
 	initializeItems() {
 		this.searchVal = '';
 		this.groupedContacts = this.searchArr;
