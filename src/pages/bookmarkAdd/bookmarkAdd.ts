@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, ModalController, Item, ActionSheetController, Platform, Events } from 'ionic-angular';
 import 'rxjs/add/operator/map';
-
+import { ServiceProvider } from '../../providers/http-service/http-service';
 @Component({
 	selector: 'page-bookmarkAdd',
 	templateUrl: 'bookmarkAdd.html'
@@ -23,9 +23,20 @@ export class BookmarkAddPage {
 
 	sorted: any[] = [];
 
-	constructor(public navCtrl: NavController, public modalCtrl: ModalController, public actionsheetCtrl: ActionSheetController, public platform: Platform, private events: Events) {
+	constructor(
+		public navCtrl: NavController,
+		public modalCtrl: ModalController,
+		public actionsheetCtrl: ActionSheetController,
+		private serviceProvider: ServiceProvider,
+		public platform: Platform) {
 
 		this.initializeItems();
+		this.serviceProvider.userCast.subscribe(data => {
+			if(data) {
+				this.userData = data;
+				this.groupContacts(this.userData);
+			}
+		});
 	}
 
 	// groupContacts(contacts) {
@@ -67,26 +78,6 @@ export class BookmarkAddPage {
 
 	}
 
-
-	ngOnInit() {
-		this.searchVal = '';
-		this.userData = JSON.parse(localStorage.getItem('content'));
-
-		this.userData.sort(function (a, b) {
-			var textA = a.name.toUpperCase();
-			var textB = b.name.toUpperCase();
-			return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-		})
-
-
-		console.log(this.userData);
-
-		// for (let i = 0; i < this.userData.length; i++) {
-		// 	this.nameArray.push(this.userData[i].name);
-		// }
-		// this.groupContacts(this.nameArray); //divder 만들기
-		this.groupContacts(this.userData); //divder 만들기
-	}
 
 	userDetail(user: object) {
 		// this.navCtrl.push(UserDetailPage, { user: user });
@@ -151,10 +142,11 @@ export class BookmarkAddPage {
 			}
 		}
 		console.log(this.userData);
-		localStorage.setItem('content', JSON.stringify(this.userData));
+		this.serviceProvider.SetUserData(this.userData);
+		//localStorage.setItem('content', JSON.stringify(this.userData));
 		//   location.reload();
 
-		this.events.publish('bookmark:add');
+		// this.events.publish('bookmark:add');
 		this.navCtrl.pop();
 
 	}

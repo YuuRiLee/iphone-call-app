@@ -1,158 +1,160 @@
 import { Component, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Camera } from '@ionic-native/camera';
-import { IonicPage, NavController, ViewController,NavParams,Platform,ActionSheetController } from 'ionic-angular';
-
+import { IonicPage, NavController, ViewController, NavParams, Platform, ActionSheetController } from 'ionic-angular';
+import { ServiceProvider } from '../../providers/http-service/http-service';
 @IonicPage()
 @Component({
-  selector: 'page-user-create',
-  templateUrl: 'user-create.html'
+	selector: 'page-user-create',
+	templateUrl: 'user-create.html'
 })
 export class UserCreatePage {
-  @ViewChild('fileInput') fileInput;
+	//@ViewChild('fileInput') fileInput;
 
-  isReadyToSave: boolean;
+	isReadyToSave: boolean;
 
-  //item: any;
+	//item: any;
 
-  form: FormGroup;
-  name:string;
-  job:string;
-  phone:string;
-  email:string;
-  website:string;
-  zipcode:string;
-  street:string;
-  suite:string;
-  city:string;
-  company:string;
-  user: any;
+	form: FormGroup;
+	name: string;
+	job: string;
+	phone: string;
+	email: string;
+	website: string;
+	zipcode: string;
+	street: string;
+	suite: string;
+	city: string;
+	company: string;
+	user: any;
 
-  userData: any[] = [];
+	userData: any[] = [];
 
-  constructor(public navCtrl: NavController,public platform: Platform,public actionsheetCtrl: ActionSheetController, public viewCtrl: ViewController, formBuilder: FormBuilder, public camera: Camera,public navParams: NavParams) {
-    this.form = formBuilder.group({
-      profilePic: [''],
-      familyname: [''],
-	  name: [''],
-	  job:[''],
-	  phone:[''],
-	  email:[''],
-	  website:[''],
-	  zipcode:[''],
-	  street:[''],
-	  suite:[''],
-	  city:[''],
-	  company:['']
-    });
+	constructor(
+		public navCtrl: NavController,
+		public platform: Platform,
+		public actionsheetCtrl: ActionSheetController,
+		public viewCtrl: ViewController,
+		public formBuilder: FormBuilder,
+		public camera: Camera,
+		public navParams: NavParams,
+		public serviceProvider : ServiceProvider
+	) {
+		this.form = formBuilder.group({
+			profilePic: [''],
+			familyname: [''],
+			name: [''],
+			job: [''],
+			phone: [''],
+			email: [''],
+			website: [''],
+			zipcode: [''],
+			street: [''],
+			suite: [''],
+			city: [''],
+			company: ['']
+		});
 
-	if (this.navParams.get('phone')) {
-		this.phone=this.navParams.get('phone');
-  }
-  if (this.navParams.get('user')) {
-    this.user=this.navParams.get('user');
-    console.log('check : ',this.user);
-    this.name=this.user.name;
-    this.job=this.user.job;
-    this.phone=this.user.phone;
-    this.email=this.user.email;
-    this.website=this.user.website;
-    this.zipcode=this.user.address.zipcode;
-    this.street=this.user.address.street;
-    this.suite=this.user.address.suite;
-    this.city=this.user.address.city;
-    this.company=this.user.company.name;
-  }
-  if (this.navParams.get('showDel')) {
+		if (this.navParams.get('phone')) {
+			this.phone = this.navParams.get('phone');
+		}
+		if (this.navParams.get('user')) {
+			this.user = this.navParams.get('user');
+			console.log('check : ', this.user);
+			this.name = this.user.name;
+			this.job = this.user.job;
+			this.phone = this.user.phone;
+			this.email = this.user.email;
+			this.website = this.user.website;
+			this.zipcode = this.user.address.zipcode;
+			this.street = this.user.address.street;
+			this.suite = this.user.address.suite;
+			this.city = this.user.address.city;
+			this.company = this.user.company.name;
+		}
+		if (this.navParams.get('showDel')) {
 
-  }
-    // Watch the form for changes, and
-    this.form.valueChanges.subscribe((v) => {
-      this.isReadyToSave = this.form.valid;
-    });
-  }
+		}
+		// Watch the form for changes, and
+		this.form.valueChanges.subscribe((v) => {
+			this.isReadyToSave = this.form.valid;
+		});
 
-  ngOnInit(){
-    this.userData = JSON.parse(localStorage.getItem('content'));
-  }
+	}
 
-  ionViewDidLoad() {
+	getPicture() {
+		if (Camera['installed']()) {
+			this.camera.getPicture({
+				destinationType: this.camera.DestinationType.DATA_URL,
+				targetWidth: 96,
+				targetHeight: 96
+			}).then((data) => {
+				this.form.patchValue({ 'profilePic': 'data:image/jpg;base64,' + data });
+			}, (err) => {
+				alert('Unable to take photo');
+			})
+		} else {
+			//this.fileInput.nativeElement.click();
+		}
+	}
 
-  }
+	processWebImage(event) {
+		let reader = new FileReader();
+		reader.onload = (readerEvent) => {
 
-  getPicture() {
-    if (Camera['installed']()) {
-      this.camera.getPicture({
-        destinationType: this.camera.DestinationType.DATA_URL,
-        targetWidth: 96,
-        targetHeight: 96
-      }).then((data) => {
-        this.form.patchValue({ 'profilePic': 'data:image/jpg;base64,' + data });
-      }, (err) => {
-        alert('Unable to take photo');
-      })
-    } else {
-      this.fileInput.nativeElement.click();
-    }
-  }
+			let imageData = (readerEvent.target as any).result;
+			this.form.patchValue({ 'profilePic': imageData });
+		};
 
-  processWebImage(event) {
-    let reader = new FileReader();
-    reader.onload = (readerEvent) => {
+		reader.readAsDataURL(event.target.files[0]);
+	}
 
-      let imageData = (readerEvent.target as any).result;
-      this.form.patchValue({ 'profilePic': imageData });
-    };
+	getProfileImageStyle() {
+		return 'url(' + this.form.controls['profilePic'].value + ')'
+	}
 
-    reader.readAsDataURL(event.target.files[0]);
-  }
+	/**
+	 * The user cancelled, so we dismiss without sending data back.
+	 */
+	cancel() {
+		this.viewCtrl.dismiss();
+	}
 
-  getProfileImageStyle() {
-    return 'url(' + this.form.controls['profilePic'].value + ')'
-  }
+	/**
+	 * The user is done and wants to create the item, so return it
+	 * back to the presenter.
+	 */
+	done() {
+		if (!this.form.valid) { return; }
+		this.viewCtrl.dismiss(this.form.value);
+	}
 
-  /**
-   * The user cancelled, so we dismiss without sending data back.
-   */
-  cancel() {
-    this.viewCtrl.dismiss();
-  }
+	delUser() {
+		for (let i = 0; i < this.userData.length; i++) {
+			if (this.user.id === this.userData[i].id) {
+				this.userData.forEach((v, i, a) => {
+					if (v.id === this.user.id) {
+						a.splice(i, 1);
+					}
+				})
+			}
+		}
+		this.serviceProvider.SetUserData(this.userData);
+		//location.reload();
+		this.viewCtrl.dismiss('userdeleted');
+	}
 
-  /**
-   * The user is done and wants to create the item, so return it
-   * back to the presenter.
-   */
-  done() {
-    if (!this.form.valid) { return; }
-    this.viewCtrl.dismiss(this.form.value);
-  }
-
-  delUser() {
-    for (let i = 0; i < this.userData.length; i++) {
-      if (this.user.id === this.userData[i].id) {
-        this.userData.forEach((v, i, a) => {
-          if (v.id === this.user.id) {
-            a.splice(i, 1);
-          }
-        })
-      }
-    }
-    localStorage.setItem('content', JSON.stringify(this.userData));
-	 //location.reload();
-	 this.viewCtrl.dismiss('userdeleted');
-  }
-
-  openMenu() {
+	openMenu() {
 		let actionSheet = this.actionsheetCtrl.create({
 			title: '',
 			cssClass: 'action-sheets-basic-page',
 			buttons: [
 				{
-          text: '연락처 삭제',
-          role: 'destructive',
+					text: '연락처 삭제',
+					role: 'destructive',
 					icon: !this.platform.is('ios') ? 'heart-outline' : null,
 					handler: () => {
-					  this.delUser();
+						this.delUser();
 					}
 				},
 				{

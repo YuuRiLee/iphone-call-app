@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, Events } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { UserDetailPage } from '../../pages/user-detail/user-detail';
 import { BookmarkAddPage } from '../bookmarkAdd/bookmarkAdd';
+import { ServiceProvider } from '../../providers/http-service/http-service';
 @Component({
 	selector: 'page-bookmark',
 	templateUrl: 'bookmark.html'
@@ -11,28 +12,38 @@ export class BookmarkPage {
 	userData: any[] = [];
 	bookmarkUserData: any[] = [];
 	showDelete: boolean = false;
-	constructor(public navCtrl: NavController, public navParams: NavParams, private events: Events) {
+	constructor(public navCtrl: NavController,
+		public navParams: NavParams,
+		private serviceProvider: ServiceProvider) {
 		// this.user = navParams.get('user');
 
 
-		this.eventsListener();
+		// this.eventsListener();
+		this.serviceProvider.userCast.subscribe(data => {
+			if(data) {
+				this.userData = data;
+				this.getBookmarkUserData();
+			}
+		});
+
+		console.log('즐겨찾기 목록',this.bookmarkUserData);
 	}
 
 
-	eventsListener() {
-		this.events.subscribe('bookmark:add', () => {
-			this.getBookmarkUserData();
-		})
-	}
+	// eventsListener() {
+	// 	this.events.subscribe('bookmark:add', () => {
+	// 		this.getBookmarkUserData();
+	// 	})
+	// }
 
-	ngOnInit() {
-		this.getBookmarkUserData();
-	}
-
+	// ngOnInit() {
+	// 	this.getBookmarkUserData();
+	// }
 
 
 	getBookmarkUserData() {
-		this.userData = JSON.parse(localStorage.getItem('content'));
+		console.log('checkcheck>>userData',this.userData);
+		//this.userData = JSON.parse(localStorage.getItem('content'));
 		this.user = this.navParams.get('user');
 		this.bookmarkUserData = [];
 
@@ -73,7 +84,8 @@ export class BookmarkPage {
 			}
 		}
 		console.log(this.userData);
-		localStorage.setItem('content', JSON.stringify(this.userData));
+		this.serviceProvider.SetUserData(this.userData);
+		//localStorage.setItem('content', JSON.stringify(this.userData));
 		// location.reload();
 	}
 

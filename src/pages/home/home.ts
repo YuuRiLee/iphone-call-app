@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController, Item, Events } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import { UserDetailPage } from '../../pages/user-detail/user-detail';
 
@@ -27,15 +27,15 @@ export class HomePage {
 	sorted: any[] = [];
 
 	constructor(
-		public navCtrl: NavController, 
-		private events: Events, 
+		public navCtrl: NavController,
 		private serviceProvider: ServiceProvider
 	) {
 		this.initializeItems();
 
-		this.serviceProvider.userCast.subscribe(data => {
-			if(data) {
-				this.userData = data;
+		this.serviceProvider.userCast.subscribe(data2 => {
+			if(data2) {
+				console.log('chechpoint userData :',data2);
+				this.userData = data2;
 				this.groupContacts(this.userData);
 			}
 		});
@@ -46,7 +46,7 @@ export class HomePage {
 	groupContacts(contacts) {
 
 		if (!contacts) return;
-
+		
 		this.sorted = [];
 		contacts.forEach((c, ci, ca) => {
 			if (this.sorted.length === 0) {
@@ -78,8 +78,6 @@ export class HomePage {
 
 
 		this.groupedContacts = this.sorted;
-		// console.log('sorted contacts: ', this.sorted);
-		// console.log('sorted contacts: ', this.groupedContacts);
 		this.searchArr = this.groupedContacts;
 
 	}

@@ -15,8 +15,7 @@ export class ServiceProvider {
 	userData: any = [];
 	callList: any = [];
 
-
-	private user$ = new BehaviorSubject<any>([]);
+	public user$ = new BehaviorSubject<any>([]);
 	userCast = this.user$.asObservable();
 
 
@@ -29,30 +28,37 @@ export class ServiceProvider {
 		public modalCtrl: ModalController,
 		private localStorage: Storage
 	) {
-		// super();
 		console.log('Hello HttpServiceProvider Provider');
-		// this.local = new Storage();
-		//this._users = <BehaviorSubject<UserModel[]>>new BehaviorSubject([]);
 	}
 
 	dataInit() {
-		console.log('음 한 번만');
+
 		this.localStorage.get('callList').then((val) => {
-			this.callList = val ? JSON.parse(val) : []
+			console.log('chechpoint  callList:', val);
+			this.callList = JSON.parse(val) ? val : []
 			this.callLis$.next(this.callList);
 		});
 		this.localStorage.get('content').then((val) => {
 			this.userData = val ? JSON.parse(val) : [];
+
 			if (this.userData.length === 0) {
 				this.getUserDataFromApi();
 			} else {
-				this.user$.next(this.userData);
+				this.userData.sort(function (a, b) {
+					var textA = a.name.toUpperCase();
+					var textB = b.name.toUpperCase();
+					return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+				})
+				// this.localStorage.set('content', this.userData);
+				// this.user$.next(this.userData);
+				this.SetUserData(this.userData);
 			}
 		});
 	}
 
 
 	getUserDataFromApi() {
+		console.log('음 한 번만');
 		this.http.get('https://jsonplaceholder.typicode.com/users')
 			.subscribe((data: Array<any>) => {
 				this.userData = data;
@@ -61,31 +67,16 @@ export class ServiceProvider {
 			});
 	}
 
+	
 
-
-	getUserData() {
-		//this.userData.next(data);
-		//return this._users.asObservable();
-		this.userData = JSON.parse(localStorage.getItem('content'));
-		this.userData.sort(function (a, b) {
-			var textA = a.name.toUpperCase();
-			var textB = b.name.toUpperCase();
-			return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-		})
-
-		// this.user.next(this.userData);
-
-
-
-		/**
-		 *   this.serviceProvider.cast.sub
-		 */
-
-		return this.userData;
+	SetUserData(userList:any){
+		this.localStorage.set('content',JSON.stringify(userList));
+		this.user$.next(userList);
 	}
-	// setUserData(data: object) {
-	// 	(localStorage.setItem('content', JSON.stringify(data)));
-	// }
+	SetCallData(callData: any) {
+		this.localStorage.set('callList', JSON.stringify(callData));
+		this.callLis$.next(callData);
+	}
 
 	userCreate(data: object, phone?: String, user?: object): void {
 		let addModal;
@@ -137,8 +128,6 @@ export class ServiceProvider {
 					var textB = b.name.toUpperCase();
 					return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
 				})
-		
-				//this.setUserData(this.userData);
 				this.user$.next(this.userData);
 
 			}

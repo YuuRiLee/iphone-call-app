@@ -16,14 +16,31 @@ export class AboutPage {
 	CallData: any;
 	callList: any[] = [];
 
-	constructor(public navCtrl: NavController, public modalCtrl: ModalController, public actionsheetCtrl: ActionSheetController, public platform: Platform,private serviceProvider: ServiceProvider) {
+	constructor(
+		public navCtrl: NavController,
+		public modalCtrl: ModalController,
+		public actionsheetCtrl: ActionSheetController,
+		public platform: Platform,
+		private serviceProvider: ServiceProvider
+		) {
 
 	}
 
 	ngOnInit() {
 		this.phoneNumber = '';
-		this.userData = JSON.parse(localStorage.getItem('content'));
-		this.CallData = JSON.parse(localStorage.getItem('callList'));
+		this.serviceProvider.userCast.subscribe(data => {
+			if(data) {
+				this.userData = data;
+			}
+		});
+
+		this.serviceProvider.callListCast.subscribe(data => {
+			if(data) {
+				this.CallData = data;
+			}
+		});
+		//this.userData = JSON.parse(localStorage.getItem('content'));
+		//this.CallData = JSON.parse(localStorage.getItem('callList'));
 
 	}
 
@@ -31,39 +48,6 @@ export class AboutPage {
 		this.serviceProvider.userCreate(this.userData,this.phoneNumber);
 		this.phoneNumber='';
 	}
-
-	// userCreate() {
-	// 	let addModal = this.modalCtrl.create(UserCreatePage, { phone: this.phoneNumber });
-	// 	addModal.onDidDismiss(item => {
-	// 		if (item) {
-	// 			if (item.name == '' && item.familyname == '') {
-	// 				item.name = '이름 없음';
-	// 			}
-	// 			this.userData.push(
-	// 				{
-	// 					name: item.familyname + item.name,
-	// 					email: item.email,
-	// 					address: {
-	// 						stree: item.street,
-	// 						suite: item.suite,
-	// 						city: item.city,
-	// 						zipcode: item.zipcode
-	// 					},
-	// 					phone: item.phone,
-	// 					website: item.website,
-	// 					company: {
-	// 						company: item.company
-	// 					}
-
-	// 				}
-	// 			);
-	// 			//storage update
-	// 			localStorage.setItem('content', JSON.stringify(this.userData));
-	// 			this.phoneNumber='';
-	// 		}
-	// 	})
-	// 	addModal.present();
-	// }
 
 	buttonClick(number: string) {
 		if (this.phoneNumber.length == 3) {
@@ -158,25 +142,10 @@ export class AboutPage {
 		};
 
 		this.CallData.push(call);
-		localStorage.setItem('callList', JSON.stringify(this.CallData));
+		console.log('데이터 확인',this.CallData);
+		this.serviceProvider.SetCallData(this.CallData);
+		//localStorage.setItem('callList', JSON.stringify(this.CallData));
 		console.log('전화 결과', call);
 		this.phoneNumber='';
 	}
-
-	//전화부에 저장되어 있는지 판단하는 함수
-	// checkTelSave(){
-	// 	let inputPhone=this.phoneNumber.replace(/\-/g, "");
-	// 	let bookPhone;
-	// 	for (let i = 0; i < this.userData.length; i++) {
-	// 		bookPhone=this.userData[i].phone.replace(/\-/g, "");
-	// 		// console.log('전화번호 번호 : ',bookPhone);
-	// 		// console.log('입력한 전화번호 : ',inputPhone);
-	// 		if (inputPhone === bookPhone) {
-	// 			console.log('전화부에 등록된 전화번호');
-	// 			return this.userData[i].name;
-	// 		}
-	// 	}
-	// 	console.log('전화부에 등록이 안된 전화번호');
-	// 	return '';
-	// }
 }

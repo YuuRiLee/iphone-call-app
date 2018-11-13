@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Events } from 'ionic-angular';
 
 import { AboutPage } from '../about/about';
 import { HomePage } from '../home/home';
@@ -17,14 +16,14 @@ export class TabsPage {
 	tab4Root = AboutPage;
 	tab5Root = VoicemailPage;
 
-	constructor(private events: Events) {
+	// constructor(private events: Events) {
 
-	}
+	// }
 
-	clickTab(ev) {
-		console.log(ev);
-		if(ev.id === 't0-1') {
-			this.events.publish('recentTabClicked');
-		}
-	}
+	// clickTab(ev) {
+	// 	console.log(ev);
+	// 	if(ev.id === 't0-1') {
+	// 		this.events.publish('recentTabClicked');
+	// 	}
+	// }
 }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, ModalController, NavParams, ActionSheetController, Platform, AlertController, Events } from 'ionic-angular';
+import { IonicPage, NavController, ModalController, NavParams, ActionSheetController, Platform, AlertController } from 'ionic-angular';
 import { UserCreatePage } from '../../pages/user-create/user-create';
-
+import { ServiceProvider } from '../../providers/http-service/http-service';
 @IonicPage()
 @Component({
 	selector: 'page-user-detail',
@@ -14,13 +14,22 @@ export class UserDetailPage {
 	call: any;
 
 	showDelete: boolean = false;
-	constructor(public navCtrl: NavController, public modalCtrl: ModalController, public navParams: NavParams, public actionsheetCtrl: ActionSheetController, public platform: Platform, public alertCtrl: AlertController, private events: Events) {
-		// this.user = navParams.get('user');
+	constructor(
+		public navCtrl: NavController,
+		public modalCtrl: ModalController,
+		public navParams: NavParams,
+		public actionsheetCtrl: ActionSheetController,
+		public platform: Platform,
+		public alertCtrl: AlertController,
+		private serviceProvider: ServiceProvider
+	) {
+		this.serviceProvider.userCast.subscribe(data => {
+			if(data) {
+				this.userData = data;
+			}
+		});
 	}
 	ngOnInit() {
-		this.userData = JSON.parse(localStorage.getItem('content'));
-
-
 		this.call = this.navParams.get('call');
 		if (!this.call) { //최신 통화 목록이 아닌 경우
 			this.call = {
@@ -51,7 +60,6 @@ export class UserDetailPage {
 				}
 			};
 		}
-		console.log(this.user.id);
 	}
 
 	openMenu(contact: any) {
@@ -104,8 +112,7 @@ export class UserDetailPage {
 			}
 		}
 		console.log(this.userData);
-		localStorage.setItem('content', JSON.stringify(this.userData));
-		this.events.publish('bookmark:add');
+		this.serviceProvider.SetUserData(this.userData);
 		// location.reload();
 
 	}
@@ -141,9 +148,8 @@ export class UserDetailPage {
 				this.userData.push(userData);
 
 				//storage update
-				localStorage.setItem('content', JSON.stringify(this.userData));
+				this.serviceProvider.SetUserData(this.userData);
 				this.user = userData;
-				this.events.publish('userupdate:userdetail');
 			}
 		})
 		addModal.present();
@@ -166,8 +172,6 @@ export class UserDetailPage {
 			console.log(item);
 
 			if (item && item === 'userdeleted') {
-				console.log('---checkpoint0-----');
-				this.events.publish('userupdate:userdetail');
 				this.navCtrl.pop();
 			} else if (item) {
 				if (item.name == '' && item.familyname == '') {
@@ -198,10 +202,9 @@ export class UserDetailPage {
 					}
 				}
 				//storage update
-				localStorage.setItem('content', JSON.stringify(this.userData));
+				this.serviceProvider.SetUserData(this.userData);
 				// location.reload();
 				this.user = updateData;
-				this.events.publish('userupdate:userdetail');
 			}
 		})
 		addModal.present();
