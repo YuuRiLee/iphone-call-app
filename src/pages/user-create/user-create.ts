@@ -9,7 +9,7 @@ import { ServiceProvider } from '../../providers/http-service/http-service';
 	templateUrl: 'user-create.html'
 })
 export class UserCreatePage {
-	//@ViewChild('fileInput') fileInput;
+	@ViewChild('fileInput') fileInput;
 
 	isReadyToSave: boolean;
 
@@ -94,7 +94,7 @@ export class UserCreatePage {
 				alert('Unable to take photo');
 			})
 		} else {
-			//this.fileInput.nativeElement.click();
+			this.fileInput.nativeElement.click();
 		}
 	}
 
