@@ -48,14 +48,7 @@ export class ServiceProvider {
 			if (this.userData.length === 0) {
 				this.getUserDataFromApi();
 			} else {
-				this.userData.sort(function (a, b) {
-					var textA = a.name.toUpperCase();
-					var textB = b.name.toUpperCase();
-					return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-				})
-				console.log('chechpoint  userData:', this.userData);
-				// this.localStorage.set('content', this.userData);
-				// this.user$.next(this.userData);
+				this.sort(this.userData);
 				this.SetUserData(this.userData);
 			}
 		});
@@ -66,9 +59,8 @@ export class ServiceProvider {
 		console.log('처음 한 번만');
 		this.http.get('https://jsonplaceholder.typicode.com/users')
 			.subscribe((data: Array<any>) => {
-				this.userData = data;
-				this.localStorage.set('content', JSON.stringify(data));
-				this.user$.next(this.userData);
+				this.sort(data);
+				this.SetUserData(data);
 			});
 	}
 
@@ -97,11 +89,8 @@ export class ServiceProvider {
 
 		addModal.onDidDismiss(item => {
 			if (item) {
-				detailData=this.makeData(item);
-				this.userData.push(detailData);
-
+				this.userData.push(this.makeData(item));
 				this.sort(this.userData);
-
 				this.SetUserData(this.userData);
 			}
 		})
