@@ -21,34 +21,9 @@
     <p>{{user.about}}</p>
   </div> -->
 	<div class="user-header">
-		<img>
-		<p>{{ user.name }}</p>
-		<div class="icon-wrapper">
-			<div>
-				<button ion-button icon-only>
-					<ion-icon name="add"></ion-icon>
-				</button>
-				<p>메세지</p>
-			</div>
-			<div>
-				<button ion-button icon-only>
-					<ion-icon name="add"></ion-icon>
-				</button>
-				<p>통화</p>
-			</div>
-			<div>
-				<button ion-button icon-only>
-					<ion-icon name="add"></ion-icon>
-				</button>
-				<p>FaceTime</p>
-			</div>
-			<div>
-				<button ion-button icon-only>
-					<ion-icon name="add"></ion-icon>
-				</button>
-				<p>메일</p>
-			</div>
-		</div>
+		<user-name [userGet]="user"></user-name>
+		<user-controller [phoneCheck]="user"></user-controller>
+	
 	</div>
 
 	<ion-list class="user-content" *ngIf=call.id>

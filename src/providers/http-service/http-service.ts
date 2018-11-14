@@ -186,6 +186,32 @@ export class ServiceProvider {
 		return groupedContacts;
 	}
 
+	call(phoneNumber) {
+		if (!phoneNumber) return; //번호를 입력해야만 전화를 걸 수 있음
+		
+		const callResult = Math.random() >= 0.5;
+		const d = new Date();
+		const id=Date.now() + Math.random();
+		let currencyTime;
+		if(callResult){ //전화를 받았을 경우에만 통화시간을 넣어줌
+			currencyTime=(Math.floor(Math.random() * 60) + 1)+'분';
+		}
+		else{
+			currencyTime='부재중 전화';
+		}
+		const call = {
+			id:  id,
+			name: '',
+			phone: phoneNumber,
+			date: d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(),
+			receive: callResult,
+			time : d.getHours()+':'+d.getMinutes(),
+			currencyTime: currencyTime
+		};
+
+		this.callList.push(call);
+		this.SetCallData(this.callList);
+	}
 }
 
 

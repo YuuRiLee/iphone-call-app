@@ -36,8 +36,8 @@ export class BookmarkPage {
 		}
 	}
 
-	userDetail(user: object) {
-		this.navCtrl.push(UserDetailPage, { user: user });
+	userDetail(userId) {
+		this.navCtrl.push(UserDetailPage, { user: userId });
 	}
 
 	editBookmark() {

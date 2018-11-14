@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,ViewChild} from '@angular/core';
 import { NavController } from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import { UserDetailPage } from '../../pages/user-detail/user-detail';
@@ -10,6 +10,8 @@ import { ServiceProvider } from '../../providers/http-service/http-service';
 	templateUrl: 'home.html'
 })
 export class HomePage {
+
+	@ViewChild('input') inputEl;
 
 	userData: any;
 
@@ -33,8 +35,8 @@ export class HomePage {
 		this.searchArr = this.groupedContacts;
 	}
 	
-	userDetail(user: object) {
-		this.navCtrl.push(UserDetailPage, { user: user });
+	userDetail(userId) {
+		this.navCtrl.push(UserDetailPage, { user: userId });
 	}
 	userCreate() {
 		this.serviceProvider.userCreate(this.userData);

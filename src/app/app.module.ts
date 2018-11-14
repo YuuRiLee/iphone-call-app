@@ -22,6 +22,7 @@ import { BookmarkPage } from '../pages/bookmark/bookmark';
 import { RecentCurrencyPage } from '../pages/recent-currency/recent-currency';
 import { VoicemailPage } from '../pages/voicemail/voicemail';
 import { BookmarkAddPage } from '../pages/bookmarkAdd/bookmarkAdd';
+import {ComponentsModule } from '../components/components.module'
 
 @NgModule({
 	declarations: [
@@ -35,13 +36,17 @@ import { BookmarkAddPage } from '../pages/bookmarkAdd/bookmarkAdd';
 		RecentCurrencyPage,
 		VoicemailPage,
 		BookmarkAddPage
+		
+		
 	],
 	imports: [
 		BrowserModule,
 		HttpModule,
 		HttpClientModule,
 		IonicModule.forRoot(MyApp),
-		IonicStorageModule.forRoot()
+		IonicStorageModule.forRoot(),
+		ComponentsModule
+		
 	],
 	bootstrap: [IonicApp],
 	entryComponents: [
@@ -54,7 +59,7 @@ import { BookmarkAddPage } from '../pages/bookmarkAdd/bookmarkAdd';
 		BookmarkPage,
 		RecentCurrencyPage,
 		VoicemailPage,
-		BookmarkAddPage
+		BookmarkAddPage,
 	],
 	providers: [
 		StatusBar,

@@ -30,6 +30,8 @@ export class RecentCurrencyPage {
 	this.serviceProvider.callListCast.subscribe(data => {
 		if(data) {
 			this.CallData = data;
+			console.log('전화 목록 : ',this.CallData);
+			this.checkTelSave();
 			this.getMissedData();
 		}
 	});
@@ -83,7 +85,7 @@ callDataDell(data: any) {
 userDetail(callUser: any) {
 	for (let i = 0; i < this.userData.length; i++) {
 		if (callUser.phone.replace(/\-/g, "") === this.userData[i].phone.replace(/\-/g, "")) { //전화부에 등록된 사람은 전화부에 데이터가 필요
-			return this.navCtrl.push(UserDetailPage, { call:callUser,user: this.userData[i] });
+			return this.navCtrl.push(UserDetailPage, { call:callUser,user: this.userData[i].id });
 			
 		}
 	}

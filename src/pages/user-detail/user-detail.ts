@@ -24,13 +24,20 @@ export class UserDetailPage {
 		private serviceProvider: ServiceProvider
 	) {
 		this.serviceProvider.userCast.subscribe(data => {
-			if(data) {
+			if (data) {
 				this.userData = data;
+				let userId = this.navParams.get('user');
+				for (let i = 0; i < this.userData.length; i++) {
+					if (userId === this.userData[i].id) {
+						this.user = this.userData[i];
+					}
+				}
 			}
 		});
 	}
 	ngOnInit() {
 		this.call = this.navParams.get('call');
+		console.log('check : ', this.call);
 		if (!this.call) { //최신 통화 목록이 아닌 경우
 			this.call = {
 				id: '',
@@ -40,7 +47,6 @@ export class UserDetailPage {
 			}
 		}
 
-		this.user = this.navParams.get('user');
 		if (!this.user) { //전화부에 저장되지 않은 경우
 			this.user = {
 				id: '',
@@ -112,13 +118,13 @@ export class UserDetailPage {
 	}
 
 	userCreate() {
-		let addModal = this.modalCtrl.create(UserCreatePage, {phone: this.call.phone });
+		let addModal = this.modalCtrl.create(UserCreatePage, { phone: this.call.phone });
 		addModal.onDidDismiss(item => {
-			 if (item) {
-				let data=this.serviceProvider.makeData(item,this.user.id);
+			if (item) {
+				let data = this.serviceProvider.makeData(item, this.user.id);
 
 				this.userData.push(data);
-				
+
 				this.serviceProvider.sort(this.userData);
 				this.serviceProvider.SetUserData(this.userData);
 				this.user = data;
@@ -141,14 +147,14 @@ export class UserDetailPage {
 				this.navCtrl.pop();
 				this.delUser();
 			} else if (item) {
-				let updateData=this.serviceProvider.makeData(item,this.user.id);
+				let updateData = this.serviceProvider.makeData(item, this.user.id);
 
 				for (let i = 0; i < this.userData.length; i++) {
 					if (this.user.id === this.userData[i].id) {
 						this.userData[i] = updateData;
 					}
 				}
-				
+
 				this.serviceProvider.sort(this.userData);
 				this.serviceProvider.SetUserData(this.userData);
 				this.user = updateData;
