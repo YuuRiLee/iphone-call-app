@@ -144,7 +144,7 @@ export class UserDetailPage {
 		let addModal = this.modalCtrl.create(UserCreatePage, { user: this.user, showDel: true });
 		addModal.onDidDismiss(item => {
 			if (item && item === 'userdeleted') {
-				this.navCtrl.pop();
+				this.navCtrl.popToRoot({animate:false});
 				this.delUser();
 			} else if (item) {
 				let updateData = this.serviceProvider.makeData(item, this.user.id);
@@ -181,5 +181,10 @@ export class UserDetailPage {
 		return src.map(function (item) {
 			return (item.year === newRecord.year && item.month === newRecord.month) ? newRecord : item;
 		});
+	}
+
+	callPhone(event){
+		console.log('여기서 전화 걸림');
+		this.serviceProvider.call(event);
 	}
 }

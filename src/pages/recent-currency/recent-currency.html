@@ -32,6 +32,7 @@
 				</button>
 				<span *ngIf='user.name'>{{user.name}}</span>
 				<span *ngIf='!user.name'>{{user.phone}}</span>
+				<span>{{user.date}}</span>
 				<button ion-button icon-only (click)="userDetail(user)">
 					<ion-icon name="add"></ion-icon>
 				</button>
@@ -45,7 +46,7 @@
 				</button>
 				<span *ngIf='user.name'>{{user.name}}</span>
 				<span *ngIf='!user.name'>{{user.phone}}</span>
-				<button ion-button icon-only (click)="userDetail(user)">
+				<button ion-button icon-only (click)="userDetail(user.id)">
 					<ion-icon name="add"></ion-icon>
 				</button>
 			</ion-item>

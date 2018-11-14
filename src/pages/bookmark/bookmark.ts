@@ -26,7 +26,7 @@ export class BookmarkPage {
 	}
 
 	getBookmarkUserData() {
-		this.user = this.navParams.get('user');
+		// this.user = this.navParams.get('user');
 		this.bookmarkUserData = [];
 
 		for (let i = 0; i < this.userData.length; i++) {
@@ -62,6 +62,6 @@ export class BookmarkPage {
 	}
 
 	addBookmark(){
-		this.navCtrl.push(BookmarkAddPage, { user: this.user });
+		this.navCtrl.push(BookmarkAddPage);
 	}
 }

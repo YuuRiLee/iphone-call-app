@@ -39,7 +39,7 @@ export class AboutPage {
 	}
 
 	userCreate() {
-		this.serviceProvider.userCreate(this.userData,this.phoneNumber);
+		this.serviceProvider.userCreate(this.phoneNumber);
 		this.phoneNumber='';
 	}
 

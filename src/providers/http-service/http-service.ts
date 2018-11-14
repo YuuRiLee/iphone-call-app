@@ -75,9 +75,8 @@ export class ServiceProvider {
 		this.callLis$.next(callData);
 	}
 
-	userCreate(data: object, phone?: String): any {
+	userCreate(phone?: String): any {
 		let addModal;
-		let detailData;
 		if (phone) {
 			console.log('case1');
 			addModal = this.modalCtrl.create(UserCreatePage, { phone: phone });

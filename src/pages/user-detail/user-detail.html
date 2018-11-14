@@ -13,17 +13,9 @@
 
 
 <ion-content>
-	<!-- <div class="item-profile" text-center #profilePic [style.background-image]="'url(' + item.profilePic + ')'">
-  </div> -->
-	<!-- 
-  <div class="item-detail" padding>
-    <h2>{{user.name}}</h2>
-    <p>{{user.about}}</p>
-  </div> -->
 	<div class="user-header">
 		<user-name [userGet]="user"></user-name>
-		<user-controller [phoneCheck]="user"></user-controller>
-	
+		<user-controller [phoneCheck]="user" (callEvent)="callPhone($event)"></user-controller>
 	</div>
 
 	<ion-list class="user-content" *ngIf=call.id>

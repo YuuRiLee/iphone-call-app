@@ -39,7 +39,7 @@ export class HomePage {
 		this.navCtrl.push(UserDetailPage, { user: userId });
 	}
 	userCreate() {
-		this.serviceProvider.userCreate(this.userData);
+		this.serviceProvider.userCreate();
 	}
 	getItems(ev){
 		this.groupedContacts=this.serviceProvider.getItems(ev,this.searchArr);
